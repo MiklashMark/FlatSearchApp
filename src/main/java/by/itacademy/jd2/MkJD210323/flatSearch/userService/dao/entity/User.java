@@ -2,27 +2,31 @@ package by.itacademy.jd2.MkJD210323.flatSearch.userService.dao.entity;
 
 import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums.UserRole;
 import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums.UserStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "user",  name = "user")
+@Table(schema = "client",  name = "client")
 public class User {
     @Id
     private UUID uuid;
-    @Column(name = "dt_create")
+    @Column(name = "dt_create", nullable = false)
     private long dataCreate;
-    @Column(name = "dt_update")
+    @Column(name = "dt_update", nullable = false)
     private long dataUpdate;
+    @Column(nullable = false)
     private String mail;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
     private String fio;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private UserRole role;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
 
@@ -32,7 +36,7 @@ public class User {
     public User(UUID uuid, long dt_create,
                 long dt_update, String mail,
                 String fio, UserRole role,
-                UserStatus status, String password) {
+                UserStatus status, java.lang.String password) {
 
         this.uuid = uuid;
         this.dataCreate = dt_create;
@@ -44,11 +48,11 @@ public class User {
         this.password = password;
     }
 
-    public String getPassword() {
+    public java.lang.String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(java.lang.String password) {
         this.password = password;
     }
 
@@ -80,7 +84,7 @@ public class User {
         return mail;
     }
 
-    public void setMail(String mail) {
+    public void setMail(java.lang.String mail) {
         this.mail = mail;
     }
 
@@ -88,7 +92,7 @@ public class User {
         return fio;
     }
 
-    public void setFio(String fio) {
+    public void setFio(java.lang.String fio) {
         this.fio = fio;
     }
 
