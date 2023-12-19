@@ -1,6 +1,6 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.core.exception;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.exception;
 
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.error.ErrorResponse;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.error.ErrorResponse;
 import lombok.Getter;
 import org.springframework.dao.DataAccessException;
 

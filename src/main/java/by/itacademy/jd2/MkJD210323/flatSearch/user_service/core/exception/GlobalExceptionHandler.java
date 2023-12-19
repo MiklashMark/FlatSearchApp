@@ -1,4 +1,4 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.core.exception;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
