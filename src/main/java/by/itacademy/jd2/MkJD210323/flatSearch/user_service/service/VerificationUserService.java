@@ -7,7 +7,7 @@ import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.exception.Intern
 import by.itacademy.jd2.MkJD210323.flatSearch.user_service.dao.api.IUserVerificationDao;
 import by.itacademy.jd2.MkJD210323.flatSearch.user_service.dao.entity.User;
 import by.itacademy.jd2.MkJD210323.flatSearch.user_service.dao.entity.VerificationEntity;
-import by.itacademy.jd2.MkJD210323.flatSearch.user_service.service.api.ISendlerService;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.service.api.ISendMailService;
 import by.itacademy.jd2.MkJD210323.flatSearch.user_service.service.api.IUserVerificationService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,10 +18,10 @@ import java.util.*;
 @Service
 public class VerificationUserService implements IUserVerificationService {
     private IUserVerificationDao verificationDao;
-    private ISendlerService mailSendlerService;
+    private ISendMailService mailSendlerService;
 
     public VerificationUserService(IUserVerificationDao verificationDao,
-                                   ISendlerService sendlerService) {
+                                   ISendMailService sendlerService) {
         this.verificationDao = verificationDao;
         this.mailSendlerService = sendlerService;
     }
