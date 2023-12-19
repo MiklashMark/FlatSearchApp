@@ -1,6 +1,6 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.core.exception;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.exception;
 
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.error.StructuredErrorResponse;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.error.StructuredErrorResponse;
 import lombok.Getter;
 
 @Getter

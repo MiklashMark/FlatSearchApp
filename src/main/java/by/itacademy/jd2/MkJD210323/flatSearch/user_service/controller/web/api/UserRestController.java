@@ -1,7 +1,8 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.controller.web.api;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.controller.web.api;
 
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.dto.UserRegistration;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.service.api.IUserRegistrationService;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.dto.UserRegistrationDTO;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.dto.VerificationDTO;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.service.api.IUserRegistrationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,12 @@ public class UserRestController {
 
 
         @PostMapping("/registration")
-        public ResponseEntity<String> register(@RequestBody UserRegistration userRegistration) {
+        public ResponseEntity<String> register(@RequestBody UserRegistrationDTO userRegistration) {
             userRegistrationService.register(userRegistration);
             return ResponseEntity.ok("User registered successfully");
+        }
+
+        public ResponseEntity<String> verification(VerificationDTO verificationDTO) {
+            return null;
         }
 }

@@ -1,9 +1,10 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.dao.entity;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.dao.entity;
 
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums.UserRole;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums.UserStatus;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.enums.UserRole;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.enums.UserStatus;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,9 +14,9 @@ public class User {
     @Id
     private UUID uuid;
     @Column(name = "dt_create", nullable = false)
-    private long dataCreate;
+    private LocalDate dataCreate;
     @Column(name = "dt_update", nullable = false)
-    private long dataUpdate;
+    private LocalDate dataUpdate;
     @Column(nullable = false)
     private String mail;
     @Column(nullable = false)
@@ -33,10 +34,10 @@ public class User {
     public User() {
     }
 
-    public User(UUID uuid, long dt_create,
-                long dt_update, String mail,
+    public User(UUID uuid, LocalDate dt_create,
+                LocalDate dt_update, String mail,
                 String fio, UserRole role,
-                UserStatus status, java.lang.String password) {
+                UserStatus status, String password) {
 
         this.uuid = uuid;
         this.dataCreate = dt_create;
@@ -64,19 +65,19 @@ public class User {
         this.uuid = uuid;
     }
 
-    public long getDataCreate() {
+    public LocalDate getDataCreate() {
         return dataCreate;
     }
 
-    public void setDataCreate(long dataCreate) {
+    public void setDataCreate(LocalDate dataCreate) {
         this.dataCreate = dataCreate;
     }
 
-    public long getDataUpdate() {
+    public LocalDate getDataUpdate() {
         return dataUpdate;
     }
 
-    public void setDataUpdate(long dataUpdate) {
+    public void setDataUpdate(LocalDate dataUpdate) {
         this.dataUpdate = dataUpdate;
     }
 

@@ -1,12 +1,12 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.service.validation;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.service.validation;
 
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.dto.UserRegistration;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums.ValidationPattern;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.error.ErrorDetail;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums.ErrorMessages;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.error.StructuredErrorResponse;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.core.exception.ValidationException;
-import by.itacademy.jd2.MkJD210323.flatSearch.userService.dao.api.IUserRegistrationDao;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.dto.UserRegistrationDTO;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.enums.ValidationPattern;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.error.ErrorDetail;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.enums.ErrorMessages;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.error.StructuredErrorResponse;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.exception.ValidationException;
+import by.itacademy.jd2.MkJD210323.flatSearch.user_service.dao.api.IUserRegistrationDao;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +21,7 @@ public class ValidationService implements IValidationService {
     }
 
     @Override
-    public void validateUser(UserRegistration user) {
+    public void validateUser(UserRegistrationDTO user) {
         errorsResponse = new StructuredErrorResponse();
         validateMail(user.getMail());
         validateFio(user.getFio());
@@ -57,7 +57,7 @@ public class ValidationService implements IValidationService {
         }
     }
 
-    private void ifExists(UserRegistration user) {
+    private void ifExists(UserRegistrationDTO user) {
         if (userRegistrationDao.existsByMail(user.getMail())) {
             addError("mail", ErrorMessages.EMAIL_ALREADY_REGISTERED.getMessage());
         }

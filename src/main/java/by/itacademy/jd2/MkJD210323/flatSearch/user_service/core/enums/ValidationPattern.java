@@ -1,4 +1,4 @@
-package by.itacademy.jd2.MkJD210323.flatSearch.userService.core.enums;
+package by.itacademy.jd2.MkJD210323.flatSearch.user_service.core.enums;
 
 import lombok.Getter;
 
