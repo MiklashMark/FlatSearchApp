@@ -11,7 +11,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException e) {
-        return new ResponseEntity<>(e.getErrorResponse(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getStructuredErrorResponsesponse(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InternalServerException.class)

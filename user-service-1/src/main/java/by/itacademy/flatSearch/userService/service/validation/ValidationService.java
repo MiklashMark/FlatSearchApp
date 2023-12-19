@@ -3,20 +3,20 @@ package by.itacademy.flatSearch.userService.service.validation;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.ValidationPattern;
 import by.itacademy.flatSearch.userService.core.error.ErrorDetail;
-import by.itacademy.flatSearch.userService.core.enums.ErrorMessages;
+import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.error.StructuredErrorResponse;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
-import by.itacademy.flatSearch.userService.dao.api.IUserRegistrationDao;
+import by.itacademy.flatSearch.userService.dao.api.IRegistrationDao;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ValidationService implements IValidationService {
-    private IUserRegistrationDao userRegistrationDao;
+    private IRegistrationDao userRegistrationDao;
     private StructuredErrorResponse errorsResponse;
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int REQUIRED_WORDS_IN_FIO = 3;
 
-    public ValidationService(IUserRegistrationDao userRegistrationDao) {
+    public ValidationService(IRegistrationDao userRegistrationDao) {
         this.userRegistrationDao = userRegistrationDao;
     }
 
@@ -37,14 +37,14 @@ public class ValidationService implements IValidationService {
         String regexPattern = ValidationPattern.EMAIL.getPattern();
 
         if (!mail.matches(regexPattern)) {
-            addError("mail", ErrorMessages.INCORRECT_MAIL_FORMAT.getMessage());
+            addError("mail", Messages.INCORRECT_MAIL_FORMAT.getMessage());
         }
     }
 
     private void validatePassword(String password) {
         String regex = ValidationPattern.PASSWORD.getPattern();
         if (password.length() < MIN_PASSWORD_LENGTH && !password.matches(regex)) {
-            addError("password", ErrorMessages.PASSWORD_LENGTH_REQUIREMENT.getMessage());
+            addError("password", Messages.PASSWORD_LENGTH_REQUIREMENT.getMessage());
         }
     }
 
@@ -53,17 +53,17 @@ public class ValidationService implements IValidationService {
         String[] words = fio.split("[ -]");
 
         if (!fio.matches(regex) && words.length != REQUIRED_WORDS_IN_FIO) {
-            addError("fio", ErrorMessages.INVALID_FIO.getMessage());
+            addError("fio", Messages.INVALID_FIO.getMessage());
         }
     }
 
     private void ifExists(UserRegistrationDTO user) {
         if (userRegistrationDao.existsByMail(user.getMail())) {
-            addError("mail", ErrorMessages.EMAIL_ALREADY_REGISTERED.getMessage());
+            addError("mail", Messages.EMAIL_ALREADY_REGISTERED.getMessage());
         }
 
         if (userRegistrationDao.existsByFio(user.getFio())) {
-            addError("fio", ErrorMessages.FIO_ALREADY_EXISTS.getMessage());
+            addError("fio", Messages.FIO_ALREADY_EXISTS.getMessage());
         }
     }
 

@@ -8,7 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-public class UserVerificationResolver implements HandlerMethodArgumentResolver {
+public class VerificationResolver implements HandlerMethodArgumentResolver {
 
     private static final  String CODE_PARAM = "code";
     private static final  String MAIL_PARAM = "mail";

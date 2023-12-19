@@ -3,12 +3,12 @@ package by.itacademy.flatSearch.userService.service;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.UserRole;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
-import by.itacademy.flatSearch.userService.core.enums.ErrorMessages;
+import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
-import by.itacademy.flatSearch.userService.dao.api.IUserRegistrationDao;
+import by.itacademy.flatSearch.userService.dao.api.IRegistrationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.service.api.IUserRegistrationService;
-import by.itacademy.flatSearch.userService.service.api.IUserVerificationService;
+import by.itacademy.flatSearch.userService.service.api.IMailQueueService;
 import by.itacademy.flatSearch.userService.service.validation.IValidationService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,15 +18,15 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
-public class UserRegistrationService implements IUserRegistrationService {
+public class RegistrationService implements IUserRegistrationService {
     private final IValidationService validationService;
-    private final IUserRegistrationDao userRegistrationDao;
-    private final IUserVerificationService verificationService;
+    private final IRegistrationDao userRegistrationDao;
+    private final IMailQueueService mailQueueService;
 
-    public UserRegistrationService(IValidationService validationService, IUserRegistrationDao userRegistrationDao, IUserVerificationService verificationService) {
+    public RegistrationService(IValidationService validationService, IRegistrationDao userRegistrationDao, IMailQueueService verificationService) {
         this.validationService = validationService;
         this.userRegistrationDao = userRegistrationDao;
-        this.verificationService = verificationService;
+        this.mailQueueService = verificationService;
     }
 
     @Override
@@ -47,9 +47,9 @@ public class UserRegistrationService implements IUserRegistrationService {
         try {
             userRegistrationDao.save(user);
         } catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
+            throw new InternalServerException(Messages.SERVER_ERROR.getMessage());
         }
-        verificationService.verify(user);
+        mailQueueService.addInMailQueue(user);
     }
 
 

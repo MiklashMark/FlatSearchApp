@@ -10,4 +10,11 @@ public class ConvertEntityDTO {
         dto.setMail(entity.getMail());
         return dto;
     }
+    public static VerificationEntity convertDtoToEntity(VerificationDTO dto) {
+        VerificationEntity entity = new VerificationEntity();
+        entity.setCode(dto.getCode());
+        entity.setMail(dto.getMail());
+        return entity;
+    }
+
 }

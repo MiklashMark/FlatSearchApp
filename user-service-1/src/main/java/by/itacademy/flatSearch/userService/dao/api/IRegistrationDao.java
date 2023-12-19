@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 @Repository
-public interface IUserRegistrationDao extends JpaRepository<User, UUID> {
+public interface IRegistrationDao extends JpaRepository<User, UUID> {
 
     boolean existsByMail(String mail);
     boolean existsByFio(String fio);
