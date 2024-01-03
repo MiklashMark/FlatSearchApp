@@ -1,6 +1,6 @@
 package by.itacademy.flatSearch;
 
-import by.itacademy.user.config.properites.JWTProperty;
+import by.itacademy.flatSearch.userService.config.security.properties.JWTProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

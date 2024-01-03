@@ -11,11 +11,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException e) {
-        return new ResponseEntity<>(e.getStructuredErrorResponsesponse(), HttpStatus.BAD_REQUEST);
+        if (shouldUseStructuredError(e)) {
+            return new ResponseEntity<>(e.getStructuredErrorResponse(), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(e.getErrorResponse(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @ExceptionHandler(InternalServerException.class)
     public ResponseEntity<Object> handleInternalServerException(InternalServerException e) {
         return new ResponseEntity<>(e.getErrorResponse(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    private boolean shouldUseStructuredError(ValidationException e) {
+        return e.getErrorResponse() == null;
+    }
+
+
 }

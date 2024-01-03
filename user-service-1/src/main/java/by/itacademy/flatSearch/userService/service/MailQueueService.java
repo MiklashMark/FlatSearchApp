@@ -52,13 +52,17 @@ public class MailQueueService implements IMailQueueService {
             sendMailService.sendMailMessage(verificationDTO);
             verificationEntity.get().setSended(true);
 
-
             try {
                 verificationDao.save(verificationEntity.get());
             } catch (DataAccessException e) {
                 throw new InternalServerException(Messages.SERVER_ERROR.getMessage());
             }
+
         }
+    }
+    @Scheduled(cron = "0 50 23 * * ?")
+    private void deleteMailMessage() {
+        verificationDao.deleteAll();
     }
 
     private String generateCode() {

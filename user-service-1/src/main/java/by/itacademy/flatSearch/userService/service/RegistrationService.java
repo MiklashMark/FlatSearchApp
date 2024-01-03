@@ -5,12 +5,13 @@ import by.itacademy.flatSearch.userService.core.enums.UserRole;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
-import by.itacademy.flatSearch.userService.dao.api.IRegistrationDao;
+import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.service.api.IUserRegistrationService;
 import by.itacademy.flatSearch.userService.service.api.IMailQueueService;
 import by.itacademy.flatSearch.userService.service.validation.IValidationService;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +21,18 @@ import java.util.UUID;
 @Service
 public class RegistrationService implements IUserRegistrationService {
     private final IValidationService validationService;
-    private final IRegistrationDao userRegistrationDao;
+    private final ICRUDUserDao UserDao;
     private final IMailQueueService mailQueueService;
+    private PasswordEncoder passwordEncoder;
 
-    public RegistrationService(IValidationService validationService, IRegistrationDao userRegistrationDao, IMailQueueService verificationService) {
+    public RegistrationService(IValidationService validationService,
+                               ICRUDUserDao icrudUserDao,
+                               IMailQueueService mailQueueService,
+                               PasswordEncoder passwordEncoder) {
         this.validationService = validationService;
-        this.userRegistrationDao = userRegistrationDao;
-        this.mailQueueService = verificationService;
+        this.UserDao = icrudUserDao;
+        this.mailQueueService = mailQueueService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,7 +43,7 @@ public class RegistrationService implements IUserRegistrationService {
         User user = new User();
         user.setMail(userRegistration.getMail());
         user.setFio(userRegistration.getFio());
-        user.setPassword(userRegistration.getPassword());
+        user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
         user.setUuid(generateUUID());
         user.setDataCreate(LocalDate.now());
         user.setDataUpdate(LocalDate.now());
@@ -45,7 +51,7 @@ public class RegistrationService implements IUserRegistrationService {
         user.setStatus(UserStatus.WAITING_ACTIVATION);
 
         try {
-            userRegistrationDao.save(user);
+            UserDao.save(user);
         } catch (DataAccessException e) {
             throw new InternalServerException(Messages.SERVER_ERROR.getMessage());
         }

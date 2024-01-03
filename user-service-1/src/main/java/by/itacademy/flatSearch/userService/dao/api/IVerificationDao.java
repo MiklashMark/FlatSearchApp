@@ -13,5 +13,6 @@ import java.util.UUID;
 public interface IVerificationDao extends JpaRepository<VerificationEntity, UUID> {
 
     Optional<VerificationEntity> findFirstBySendFlagFalse();
-    Optional<VerificationEntity> findByMail(String mail);
+    Optional<VerificationEntity> findByMailAndCode(String mail, String code);
+    void delete(VerificationEntity verificationEntity);
 }

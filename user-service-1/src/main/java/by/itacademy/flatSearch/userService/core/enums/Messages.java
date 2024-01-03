@@ -10,7 +10,8 @@ public enum Messages {
             " Please contact your administrator"),
     REGISTERED_SUCCESSFULLY("Registered successfully. You should receive a confirmation link/code to your email."),
     INCORRECT_VERIFICATION_CODE("Incorrect code. Try again."),
-    VERIFIED_SUCCESSFULLY("Verification successfully");
+    VERIFIED_SUCCESSFULLY("Verification successfully"),
+    INCORRECT_LOGIN_OR_PASSWORD("Login or password is incorrect");
     private final String message;
 
     Messages(String message) {

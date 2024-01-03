@@ -6,18 +6,19 @@ import by.itacademy.flatSearch.userService.core.error.ErrorDetail;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.error.StructuredErrorResponse;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
-import by.itacademy.flatSearch.userService.dao.api.IRegistrationDao;
+import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ValidationService implements IValidationService {
-    private IRegistrationDao userRegistrationDao;
+    private ICRUDUserDao crudUserDao;
     private StructuredErrorResponse errorsResponse;
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int REQUIRED_WORDS_IN_FIO = 3;
 
-    public ValidationService(IRegistrationDao userRegistrationDao) {
-        this.userRegistrationDao = userRegistrationDao;
+    public ValidationService(ICRUDUserDao crudUserDao, StructuredErrorResponse errorsResponse) {
+        this.crudUserDao = crudUserDao;
+        this.errorsResponse = errorsResponse;
     }
 
     @Override
@@ -58,11 +59,11 @@ public class ValidationService implements IValidationService {
     }
 
     private void ifExists(UserRegistrationDTO user) {
-        if (userRegistrationDao.existsByMail(user.getMail())) {
+        if (crudUserDao.existsByMail(user.getMail())) {
             addError("mail", Messages.EMAIL_ALREADY_REGISTERED.getMessage());
         }
 
-        if (userRegistrationDao.existsByFio(user.getFio())) {
+        if (crudUserDao.existsByFio(user.getFio())) {
             addError("fio", Messages.FIO_ALREADY_EXISTS.getMessage());
         }
     }
