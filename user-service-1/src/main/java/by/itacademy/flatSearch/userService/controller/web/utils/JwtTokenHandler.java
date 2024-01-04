@@ -3,7 +3,6 @@ package by.itacademy.flatSearch.userService.controller.web.utils;
 import by.itacademy.flatSearch.userService.config.security.properties.JWTProperty;
 import by.itacademy.flatSearch.userService.core.dto.LoginDTO;
 import io.jsonwebtoken.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -32,7 +31,7 @@ public class JwtTokenHandler {
                 .compact();
     }
 
-    public String getUsername(String token) {
+    public String getMail(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
