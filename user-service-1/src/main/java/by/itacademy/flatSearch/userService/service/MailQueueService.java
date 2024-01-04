@@ -12,7 +12,6 @@ import by.itacademy.flatSearch.userService.service.api.IMailQueueService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -48,7 +47,7 @@ public class MailQueueService implements IMailQueueService {
         Optional<VerificationEntity> verificationEntity = verificationDao.findFirstBySendFlagFalse();
 
         if (verificationEntity.isPresent()) {
-            VerificationDTO verificationDTO = ConvertEntityDTO.convertEntityToDTO(verificationEntity.get());
+            VerificationDTO verificationDTO = ConvertEntityDTO.convertVerificationEntityToDTO(verificationEntity.get());
             sendMailService.sendMailMessage(verificationDTO);
             verificationEntity.get().setSended(true);
 

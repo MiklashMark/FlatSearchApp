@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "client", name = "mail_queue")
+@Table(schema = "users", name = "mail_queue")
 public class VerificationEntity {
     @Id
     private UUID uuid;

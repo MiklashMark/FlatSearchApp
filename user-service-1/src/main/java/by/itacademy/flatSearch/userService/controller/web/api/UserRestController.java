@@ -5,6 +5,7 @@ import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.service.api.ILoginService;
+import by.itacademy.flatSearch.userService.service.api.IPersonalInformationService;
 import by.itacademy.flatSearch.userService.service.api.IUserRegistrationService;
 import by.itacademy.flatSearch.userService.service.api.IVerificationService;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,16 @@ public class UserRestController {
     private final IUserRegistrationService registrationService;
     private final IVerificationService verificationService;
     private final ILoginService loginService;
+    private final IPersonalInformationService personalInformationService;
 
-    public UserRestController(IUserRegistrationService userRegistrationService, IVerificationService verificationService, ILoginService loginService) {
-        this.registrationService = userRegistrationService;
+    public UserRestController(IUserRegistrationService registrationService,
+                              IVerificationService verificationService,
+                              ILoginService loginService,
+                              IPersonalInformationService personalInformationService) {
+        this.registrationService = registrationService;
         this.verificationService = verificationService;
         this.loginService = loginService;
+        this.personalInformationService = personalInformationService;
     }
 
     @PostMapping("/login")
@@ -30,7 +36,7 @@ public class UserRestController {
 
     @GetMapping("/me")
     public ResponseEntity<String> getPersonalInfo() {
-        return null;
+        return ResponseEntity.ok().body(personalInformationService.get().toString());
     }
 
     @PostMapping("/registration")

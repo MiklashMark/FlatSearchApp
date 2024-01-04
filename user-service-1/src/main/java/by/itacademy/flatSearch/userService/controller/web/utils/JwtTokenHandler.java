@@ -22,9 +22,9 @@ public class JwtTokenHandler {
         return generateAccessToken(user.getMail());
     }
 
-    public String generateAccessToken(String name) {
+    public String generateAccessToken(String mail) {
         return Jwts.builder()
-                .setSubject(name)
+                .setSubject(mail)
                 .setIssuer(property.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week

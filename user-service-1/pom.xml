@@ -11,9 +11,9 @@
 	</parent>
 
 	<groupId>by.it-academy</groupId>
-	<artifactId>user-service-1</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>user-service-1</name>
+	<artifactId>user-service</artifactId>
+	<version>0.0.7-SNAPSHOT</version>
+	<name>user-service</name>
 
 	<description>flatSearch App Spring Boot</description>
 

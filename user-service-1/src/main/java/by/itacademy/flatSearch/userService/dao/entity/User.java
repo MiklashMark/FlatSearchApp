@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "client",  name = "client")
+@Table(schema = "users",  name = "users")
 public class User {
     @Id
     private UUID uuid;
