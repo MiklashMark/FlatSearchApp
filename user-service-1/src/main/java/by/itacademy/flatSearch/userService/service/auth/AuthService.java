@@ -1,5 +1,6 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
+import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
 import by.itacademy.flatSearch.userService.core.dto.LoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
@@ -34,6 +35,7 @@ public class AuthService implements IAuthService {
     private ICRUDUserDao crudUserDao;
     private final UserHolder holder;
     private JwtTokenHandler tokenHandler;
+    private EntityDTOMapper mapper;
 
     public AuthService(IValidationService validationService,
                        ICRUDUserDao userDao,
@@ -75,21 +77,15 @@ public class AuthService implements IAuthService {
     public void save(UserRegistrationDTO userRegistration) {
         validationService.validateUser(userRegistration);
 
-        User user = new User();
-        user.setMail(userRegistration.getMail());
-        user.setFio(userRegistration.getFio());
+        User user = mapper.convertUserRegistrationDTOToUserEntity(userRegistration);
         user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
-        user.setUuid(UUID.randomUUID());
-        user.setDataCreate(LocalDate.now());
-        user.setDataUpdate(LocalDate.now());
-        user.setRole(UserRole.USER);
-        user.setStatus(UserStatus.WAITING_ACTIVATION);
 
         try {
             userDao.save(user);
         } catch (DataAccessException e) {
             throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
         }
+
         mailQueueService.addInMailQueue(user);
     }
 

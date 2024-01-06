@@ -16,9 +16,9 @@ public class User implements UserDetails{
     @Id
     private UUID uuid;
     @Column(name = "dt_create", nullable = false)
-    private LocalDate dataCreate;
+    private long dataCreate;
     @Column(name = "dt_update", nullable = false)
-    private LocalDate dataUpdate;
+    private long dataUpdate;
     @Column(nullable = false)
     private String mail;
     @Column(nullable = false)
@@ -36,19 +36,18 @@ public class User implements UserDetails{
     public User() {
     }
 
-    public User(UUID uuid, LocalDate dt_create,
-                LocalDate dt_update, String mail,
-                String fio, UserRole role,
-                UserStatus status, String password) {
-
+    public User(UUID uuid, long dataCreate,
+                long dataUpdate, String mail,
+                String password, String fio,
+                UserRole role, UserStatus status) {
         this.uuid = uuid;
-        this.dataCreate = dt_create;
-        this.dataUpdate = dt_update;
+        this.dataCreate = dataCreate;
+        this.dataUpdate = dataUpdate;
         this.mail = mail;
+        this.password = password;
         this.fio = fio;
         this.role = role;
         this.status = status;
-        this.password = password;
     }
 
     @Override
@@ -97,19 +96,19 @@ public class User implements UserDetails{
         this.uuid = uuid;
     }
 
-    public LocalDate getDataCreate() {
+    public long getDataCreate() {
         return dataCreate;
     }
 
-    public void setDataCreate(LocalDate dataCreate) {
+    public void setDataCreate(long dataCreate) {
         this.dataCreate = dataCreate;
     }
 
-    public LocalDate getDataUpdate() {
+    public long getDataUpdate() {
         return dataUpdate;
     }
 
-    public void setDataUpdate(LocalDate dataUpdate) {
+    public void setDataUpdate(long dataUpdate) {
         this.dataUpdate = dataUpdate;
     }
 

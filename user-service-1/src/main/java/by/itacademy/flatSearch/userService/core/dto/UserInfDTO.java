@@ -14,6 +14,7 @@ public class UserInfDTO {
     private long dt_create;
     private long dt_update;
     private String mail;
+    private String password;
     private String fio;
     private String role;
     private String status;

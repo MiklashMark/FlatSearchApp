@@ -47,8 +47,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserInfDTO get(UUID id) {
-        return null;
+    public UserInfDTO get(UUID uuid) {
+        try {
+            return userDao.findByUuid(uuid)
+                    .orElseThrow(() -> new ValidationException(Messages.USER_NOT_FOUND.getMessage()));
+        }  catch (DataAccessException e) {
+            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+        }
     }
 
     @Override

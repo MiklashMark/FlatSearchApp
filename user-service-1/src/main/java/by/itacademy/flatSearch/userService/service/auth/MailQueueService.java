@@ -1,6 +1,6 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
-import by.itacademy.flatSearch.userService.core.utils.ConvertEntityDTO;
+import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
@@ -19,11 +19,14 @@ import java.util.*;
 public class MailQueueService implements IMailQueueService {
     private IVerificationDao verificationDao;
     private ISendMailService sendMailService;
+    private EntityDTOMapper mapper;
 
     public MailQueueService(IVerificationDao verificationDao,
-                            ISendMailService sendlerService) {
+                            ISendMailService sendMailService,
+                            EntityDTOMapper mapper) {
         this.verificationDao = verificationDao;
-        this.sendMailService = sendlerService;
+        this.sendMailService = sendMailService;
+        this.mapper = mapper;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class MailQueueService implements IMailQueueService {
         Optional<VerificationEntity> verificationEntity = verificationDao.findFirstBySendFlagFalse();
 
         if (verificationEntity.isPresent()) {
-            VerificationDTO verificationDTO = ConvertEntityDTO.convertVerificationEntityToDTO(verificationEntity.get());
+            VerificationDTO verificationDTO = mapper.convertVerificationEntityToDTO(verificationEntity.get());
             sendMailService.sendMailMessage(verificationDTO);
             verificationEntity.get().setSended(true);
 
