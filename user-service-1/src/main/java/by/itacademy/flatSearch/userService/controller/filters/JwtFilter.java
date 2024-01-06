@@ -1,7 +1,7 @@
-package by.itacademy.flatSearch.userService.controller.web.filters;
+package by.itacademy.flatSearch.userService.controller.filters;
 
-import by.itacademy.flatSearch.userService.controller.web.utils.JwtTokenHandler;
-import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
+import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
+import by.itacademy.flatSearch.userService.service.user.api.IUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,18 +15,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final ICRUDUserDao crudUserDao;
+    private final IUserService userService;
     private final JwtTokenHandler jwtHandler;
 
-    public JwtFilter(ICRUDUserDao crudUserDao, JwtTokenHandler jwtHandler) {
-        this.crudUserDao = crudUserDao;
+
+    public JwtFilter(IUserService userService, JwtTokenHandler jwtHandler) {
+        this.userService = userService;
         this.jwtHandler = jwtHandler;
     }
 
@@ -50,14 +50,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserDetails userDetails = crudUserDao
-                .findByMail(jwtHandler.getMail(token));
+        UserDetails userDetails = userService.get(jwtHandler.getMail(token));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null,
-                userDetails == null ?
-                        List.of() : userDetails.getAuthorities()
+                userDetails.getAuthorities()
         );
 
         authentication.setDetails(

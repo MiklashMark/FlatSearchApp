@@ -7,7 +7,7 @@ import org.springframework.dao.DataAccessException;
 @Getter
 public class InternalServerException extends DataAccessException {
     private ErrorResponse errorResponse;
-    public InternalServerException(String message) {
+    public InternalServerException(String message, DataAccessException e) {
         super(message);
         errorResponse = new ErrorResponse();
         errorResponse.setMessage(message);

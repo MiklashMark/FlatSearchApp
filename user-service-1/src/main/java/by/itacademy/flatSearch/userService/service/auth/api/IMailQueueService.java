@@ -1,4 +1,4 @@
-package by.itacademy.flatSearch.userService.service.api;
+package by.itacademy.flatSearch.userService.service.auth.api;
 
 
 import by.itacademy.flatSearch.userService.dao.entity.User;

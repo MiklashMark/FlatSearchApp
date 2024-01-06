@@ -1,14 +1,14 @@
-package by.itacademy.flatSearch.userService.service;
+package by.itacademy.flatSearch.userService.service.auth;
 
-import by.itacademy.flatSearch.userService.core.dto.ConvertEntityDTO;
+import by.itacademy.flatSearch.userService.core.utils.ConvertEntityDTO;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
 import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
-import by.itacademy.flatSearch.userService.service.api.ISendMailService;
-import by.itacademy.flatSearch.userService.service.api.IMailQueueService;
+import by.itacademy.flatSearch.userService.service.auth.api.ISendMailService;
+import by.itacademy.flatSearch.userService.service.auth.api.IMailQueueService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class MailQueueService implements IMailQueueService {
         try {
             verificationDao.save(verificationUser);
         } catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage());
+            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
         }
     }
 
@@ -54,7 +54,7 @@ public class MailQueueService implements IMailQueueService {
             try {
                 verificationDao.save(verificationEntity.get());
             } catch (DataAccessException e) {
-                throw new InternalServerException(Messages.SERVER_ERROR.getMessage());
+                throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
             }
 
         }

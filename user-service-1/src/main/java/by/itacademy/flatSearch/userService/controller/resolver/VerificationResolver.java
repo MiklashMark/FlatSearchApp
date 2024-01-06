@@ -1,4 +1,4 @@
-package by.itacademy.flatSearch.userService.controller.web.resolver;
+package by.itacademy.flatSearch.userService.controller.resolver;
 
 
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;

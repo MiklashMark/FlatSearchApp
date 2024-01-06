@@ -21,6 +21,11 @@ public class MailService implements IMailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setText("Verification code: " + mailDTO.getCode() + "or tap to the link http://localhost:8080/api/v1/users/verification?code=" + mailDTO.getCode() + "&mail=" + mailDTO.getMail());
         message.setTo(mailDTO.getMail());
-        mailSender.send(message);
+        try {
+            mailSender.send(message);
+        } catch () {
+
+        }
+
     }
 }

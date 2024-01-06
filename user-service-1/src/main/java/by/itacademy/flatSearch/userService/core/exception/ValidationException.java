@@ -14,6 +14,7 @@ public class ValidationException extends IllegalArgumentException {
         errorResponse.setLogRef("structured_error");
     }
 
+
     public ValidationException(ErrorResponse errorResponse) {
         this.errorResponse = errorResponse;
         errorResponse.setLogRef("error");

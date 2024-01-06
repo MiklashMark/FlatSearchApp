@@ -1,5 +1,7 @@
-package by.itacademy.flatSearch.userService.core.dto;
+package by.itacademy.flatSearch.userService.core.utils;
 
+import by.itacademy.flatSearch.userService.core.dto.UserDTO;
+import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
 

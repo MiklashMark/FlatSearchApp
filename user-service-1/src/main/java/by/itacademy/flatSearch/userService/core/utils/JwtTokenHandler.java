@@ -1,4 +1,4 @@
-package by.itacademy.flatSearch.userService.controller.web.utils;
+package by.itacademy.flatSearch.userService.core.utils;
 
 import by.itacademy.flatSearch.userService.config.security.properties.JWTProperty;
 import by.itacademy.flatSearch.userService.core.dto.LoginDTO;

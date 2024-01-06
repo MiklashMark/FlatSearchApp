@@ -1,6 +1,7 @@
-package by.itacademy.flatSearch.userService.service.validation;
+package by.itacademy.flatSearch.userService.service.auth.validation;
 
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
+import by.itacademy.flatSearch.userService.core.enums.ErrorFieldNames;
 import by.itacademy.flatSearch.userService.core.enums.ValidationPattern;
 import by.itacademy.flatSearch.userService.core.error.ErrorDetail;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
@@ -38,14 +39,14 @@ public class ValidationService implements IValidationService {
         String regexPattern = ValidationPattern.EMAIL.getPattern();
 
         if (!mail.matches(regexPattern)) {
-            addError("mail", Messages.INCORRECT_MAIL_FORMAT.getMessage());
+            addError(ErrorFieldNames.MAIL.getField(), Messages.INCORRECT_MAIL_FORMAT.getMessage());
         }
     }
 
     private void validatePassword(String password) {
         String regex = ValidationPattern.PASSWORD.getPattern();
         if (password.length() < MIN_PASSWORD_LENGTH && !password.matches(regex)) {
-            addError("password", Messages.PASSWORD_LENGTH_REQUIREMENT.getMessage());
+            addError(ErrorFieldNames.PASSWORD.getField(), Messages.PASSWORD_LENGTH_REQUIREMENT.getMessage());
         }
     }
 
@@ -54,17 +55,17 @@ public class ValidationService implements IValidationService {
         String[] words = fio.split("[ -]");
 
         if (!fio.matches(regex) && words.length != REQUIRED_WORDS_IN_FIO) {
-            addError("fio", Messages.INVALID_FIO.getMessage());
+            addError(ErrorFieldNames.FIO.getField(), Messages.INVALID_FIO.getMessage());
         }
     }
 
     private void ifExists(UserRegistrationDTO user) {
         if (crudUserDao.existsByMail(user.getMail())) {
-            addError("mail", Messages.EMAIL_ALREADY_REGISTERED.getMessage());
+            addError(ErrorFieldNames.MAIL.getField(), Messages.EMAIL_ALREADY_REGISTERED.getMessage());
         }
 
         if (crudUserDao.existsByFio(user.getFio())) {
-            addError("fio", Messages.FIO_ALREADY_EXISTS.getMessage());
+            addError(ErrorFieldNames.FIO.getField(), Messages.FIO_ALREADY_EXISTS.getMessage());
         }
     }
 
