@@ -1,4 +1,4 @@
-package by.itacademy.flatSearch.userService.core.exceptions.exceptions;
+package by.itacademy.flatSearch.userService.core.exception.custom_exceptions;
 
 import by.itacademy.flatSearch.userService.core.enums.ErrorsTypes;
 import by.itacademy.flatSearch.userService.core.error.ErrorResponse;

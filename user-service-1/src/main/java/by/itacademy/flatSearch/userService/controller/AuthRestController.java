@@ -7,10 +7,12 @@ import by.itacademy.flatSearch.userService.core.enums.messages.Messages;
 import by.itacademy.flatSearch.userService.service.auth.api.IAuthService;
 import by.itacademy.flatSearch.userService.service.auth.api.IVerificationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Transactional(readOnly = true)
 public class AuthRestController {
     private final IVerificationService verificationService;
     private final IAuthService authService;
@@ -31,6 +33,7 @@ public class AuthRestController {
     }
 
     @PostMapping("/registration")
+    @Transactional
     public ResponseEntity<String> register(@RequestBody UserRegistrationDTO userRegistration) {
         authService.save(userRegistration);
         return ResponseEntity.status(201).body(Messages.REGISTERED_SUCCESSFULLY.getMessage());

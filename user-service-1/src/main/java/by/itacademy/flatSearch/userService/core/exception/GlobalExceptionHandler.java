@@ -1,8 +1,8 @@
-package by.itacademy.flatSearch.userService.core.exceptions;
+package by.itacademy.flatSearch.userService.core.exception;
 
-import by.itacademy.flatSearch.userService.core.exceptions.exceptions.AccountActivationException;
-import by.itacademy.flatSearch.userService.core.exceptions.exceptions.InternalServerException;
-import by.itacademy.flatSearch.userService.core.exceptions.exceptions.ValidationException;
+import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.AccountActivationException;
+import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.InternalServerException;
+import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

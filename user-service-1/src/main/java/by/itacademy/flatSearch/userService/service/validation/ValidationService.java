@@ -8,8 +8,8 @@ import by.itacademy.flatSearch.userService.core.enums.ValidationPattern;
 import by.itacademy.flatSearch.userService.core.error.ErrorDetail;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.error.StructuredErrorResponse;
-import by.itacademy.flatSearch.userService.core.exceptions.exceptions.InternalServerException;
-import by.itacademy.flatSearch.userService.core.exceptions.exceptions.ValidationException;
+import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.InternalServerException;
+import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import org.springframework.dao.DataAccessException;
@@ -26,7 +26,9 @@ public class ValidationService implements IValidationService {
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int REQUIRED_WORDS_IN_FIO = 3;
 
-    public ValidationService(ICRUDUserDao crudUserDao, StructuredErrorResponse errorsResponse, PasswordEncoder passwordEncoder) {
+    public ValidationService(ICRUDUserDao crudUserDao,
+                             StructuredErrorResponse errorsResponse,
+                             PasswordEncoder passwordEncoder) {
         this.crudUserDao = crudUserDao;
         this.errorsResponse = errorsResponse;
         this.passwordEncoder = passwordEncoder;
@@ -123,15 +125,14 @@ public class ValidationService implements IValidationService {
 
     private String getCorrectPassword(String mail) {
         try {
-            Optional<User> user = crudUserDao.findByMail(mail);
-            if (user.isEmpty()) {
-                throw new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage());
-            }
-            return user.get().getPassword();
+            User user = crudUserDao.findByMail(mail).orElseThrow(()
+                    -> new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage()));
+            return user.getPassword();
         } catch (DataAccessException e) {
             throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
     }
+
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
