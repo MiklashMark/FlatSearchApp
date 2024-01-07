@@ -1,10 +1,11 @@
 package by.itacademy.flatSearch.userService.service.auth.validation;
 
+import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.ErrorFieldNames;
 import by.itacademy.flatSearch.userService.core.enums.ValidationPattern;
 import by.itacademy.flatSearch.userService.core.error.ErrorDetail;
-import by.itacademy.flatSearch.userService.core.enums.Messages;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.error.StructuredErrorResponse;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
@@ -23,30 +24,39 @@ public class ValidationService implements IValidationService {
     }
 
     @Override
-    public void validateUser(UserRegistrationDTO user) {
+    public void registrationValidation(UserRegistrationDTO registrationDTO) {
         errorsResponse = new StructuredErrorResponse();
-        validateMail(user.getMail());
-        validateFio(user.getFio());
-        validatePassword(user.getPassword());
-        ifExists(user);
+        validateMail(registrationDTO.getMail());
+        validateFio(registrationDTO.getFio());
+        validatePassword(registrationDTO.getPassword());
+        ifExists(registrationDTO);
 
         if (!errorsResponse.getErrors().isEmpty()) {
             throw new ValidationException(errorsResponse);
         }
     }
 
+    @Override
+    public void loginValidation(UserLoginDTO loginDTO) {
+        errorsResponse = new StructuredErrorResponse();
+
+    }
+
     private void validateMail(String mail) {
         String regexPattern = ValidationPattern.EMAIL.getPattern();
+        if (mail.isBlank()) {
+            addError(ErrorFieldNames.MAIL.getField(), ErrorMessages.INCORRECT_MAIL_FORMAT.getMessage());
+        }
 
         if (!mail.matches(regexPattern)) {
-            addError(ErrorFieldNames.MAIL.getField(), Messages.INCORRECT_MAIL_FORMAT.getMessage());
+            addError(ErrorFieldNames.MAIL.getField(), ErrorMessages.INCORRECT_MAIL_FORMAT.getMessage());
         }
     }
 
     private void validatePassword(String password) {
         String regex = ValidationPattern.PASSWORD.getPattern();
         if (password.length() < MIN_PASSWORD_LENGTH && !password.matches(regex)) {
-            addError(ErrorFieldNames.PASSWORD.getField(), Messages.PASSWORD_LENGTH_REQUIREMENT.getMessage());
+            addError(ErrorFieldNames.PASSWORD.getField(), ErrorMessages.PASSWORD_LENGTH_REQUIREMENT.getMessage());
         }
     }
 
@@ -55,17 +65,17 @@ public class ValidationService implements IValidationService {
         String[] words = fio.split("[ -]");
 
         if (!fio.matches(regex) && words.length != REQUIRED_WORDS_IN_FIO) {
-            addError(ErrorFieldNames.FIO.getField(), Messages.INVALID_FIO.getMessage());
+            addError(ErrorFieldNames.FIO.getField(), ErrorMessages.INVALID_FIO.getMessage());
         }
     }
 
     private void ifExists(UserRegistrationDTO user) {
         if (crudUserDao.existsByMail(user.getMail())) {
-            addError(ErrorFieldNames.MAIL.getField(), Messages.EMAIL_ALREADY_REGISTERED.getMessage());
+            addError(ErrorFieldNames.MAIL.getField(), ErrorMessages.EMAIL_ALREADY_REGISTERED.getMessage());
         }
 
         if (crudUserDao.existsByFio(user.getFio())) {
-            addError(ErrorFieldNames.FIO.getField(), Messages.FIO_ALREADY_EXISTS.getMessage());
+            addError(ErrorFieldNames.FIO.getField(), ErrorMessages.FIO_ALREADY_EXISTS.getMessage());
         }
     }
 

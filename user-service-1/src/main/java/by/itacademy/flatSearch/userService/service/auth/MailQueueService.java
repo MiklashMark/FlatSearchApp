@@ -2,7 +2,7 @@ package by.itacademy.flatSearch.userService.service.auth;
 
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
-import by.itacademy.flatSearch.userService.core.enums.Messages;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
 import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
@@ -36,7 +36,7 @@ public class MailQueueService implements IMailQueueService {
         try {
             verificationDao.save(verificationUser);
         } catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
         }
     }
 
@@ -53,7 +53,7 @@ public class MailQueueService implements IMailQueueService {
             try {
                 verificationDao.save(verificationEntity.get());
             } catch (DataAccessException e) {
-                throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+                throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
             }
 
         }

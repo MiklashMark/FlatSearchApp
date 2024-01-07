@@ -26,7 +26,7 @@ public class JwtTokenHandler {
                 .setSubject(mail)
                 .setIssuer(property.getIssuer())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(7))) // 1 week
                 .signWith(SignatureAlgorithm.HS512, property.getSecret())
                 .compact();
     }

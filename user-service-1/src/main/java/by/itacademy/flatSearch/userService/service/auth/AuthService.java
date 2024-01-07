@@ -1,12 +1,11 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
-import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
-import by.itacademy.flatSearch.userService.core.enums.Messages;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
@@ -57,7 +56,7 @@ public class AuthService implements IAuthService {
         String correctPassword = getCorrectPassword(userLoginDTO.getMail());
 
         if (!passwordEncoder.matches(userLoginDTO.getPassword(), correctPassword)) {
-            throw new ValidationException(Messages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
+            throw new ValidationException(ErrorMessages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
         }
 
         return tokenHandler.generateAccessToken(userLoginDTO);
@@ -70,7 +69,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public void save(UserRegistrationDTO userRegistration) {
-        validationService.validateUser(userRegistration);
+        validationService.registrationValidation(userRegistration);
 
         User user = EntityDTOMapper.instance.userRegistrationDTOToUserEntity(userRegistration);
         user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
@@ -80,7 +79,7 @@ public class AuthService implements IAuthService {
         try {
             userDao.save(user);
         } catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
         }
 
         mailQueueService.addInMailQueue(user);
@@ -90,11 +89,11 @@ public class AuthService implements IAuthService {
         try {
             Optional<User> user = crudUserDao.findByMail(mail);
             if (user.isEmpty()) {
-                throw new ValidationException(Messages.USER_NOT_FOUND.getMessage());
+                throw new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage());
             }
             return user.get().getPassword();
         } catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
         }
     }
 

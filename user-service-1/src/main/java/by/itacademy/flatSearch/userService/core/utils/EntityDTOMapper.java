@@ -19,10 +19,7 @@ public interface EntityDTOMapper {
     VerificationDTO verificationEntityToDTO(VerificationEntity entity);
     VerificationEntity verificationDTOToEntity(VerificationDTO dto);
 
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "uuid", ignore = true)
-    @Mapping(target = "dtUpdate", ignore = true)
-    @Mapping(target = "dtCreate", ignore = true)
+
     UserDTO userEntityToUserDTO(User user);
     @Mapping(target = "uuid", ignore = true)
     @Mapping(target = "dataCreate", ignore = true)

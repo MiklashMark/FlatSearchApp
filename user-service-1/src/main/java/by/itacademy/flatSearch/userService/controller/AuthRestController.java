@@ -3,7 +3,7 @@ package by.itacademy.flatSearch.userService.controller;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
-import by.itacademy.flatSearch.userService.core.enums.Messages;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.service.auth.api.IAuthService;
 import by.itacademy.flatSearch.userService.service.auth.api.IVerificationService;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +33,12 @@ public class AuthRestController {
     @PostMapping("/registration")
     public ResponseEntity<String> register(@RequestBody UserRegistrationDTO userRegistration) {
         authService.save(userRegistration);
-        return ResponseEntity.status(201).body(Messages.REGISTERED_SUCCESSFULLY.getMessage());
+        return ResponseEntity.status(201).body(ErrorMessages.REGISTERED_SUCCESSFULLY.getMessage());
     }
 
     @GetMapping("/verification")
     public ResponseEntity<String> verify(VerificationDTO verificationDTO) {
         verificationService.verify(verificationDTO);
-        return ResponseEntity.ok(Messages.VERIFIED_SUCCESSFULLY.getMessage());
+        return ResponseEntity.ok(ErrorMessages.VERIFIED_SUCCESSFULLY.getMessage());
     }
 }

@@ -2,7 +2,7 @@ package by.itacademy.flatSearch.userService.service.user;
 
 import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
-import by.itacademy.flatSearch.userService.core.enums.Messages;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
@@ -32,11 +32,10 @@ public class UserService implements IUserService {
 
         user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
 
-
         try {
             userDao.save(user);
         } catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
         }
     }
 
@@ -49,11 +48,11 @@ public class UserService implements IUserService {
     public UserDTO get(UUID uuid) {
         try {
             User user = userDao.findByUuid(uuid)
-                    .orElseThrow(() -> new ValidationException(Messages.USER_NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage()));
             return EntityDTOMapper.instance.userEntityToUserDTO(user);
 
         }  catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
         }
     }
 
@@ -61,11 +60,11 @@ public class UserService implements IUserService {
     public UserDTO get(String mail) {
         try {
             User user = userDao.findByMail(mail)
-                    .orElseThrow(() -> new ValidationException(Messages.USER_NOT_FOUND.getMessage()));
+                    .orElseThrow(() -> new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage()));
           return EntityDTOMapper.instance.userEntityToUserDTO(user);
 
         }  catch (DataAccessException e) {
-            throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
         }
     }
 

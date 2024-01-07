@@ -2,7 +2,7 @@ package by.itacademy.flatSearch.userService.service.auth;
 
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.ErrorsTypes;
-import by.itacademy.flatSearch.userService.core.enums.Messages;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import by.itacademy.flatSearch.userService.core.error.ErrorResponse;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
@@ -32,7 +32,7 @@ public class VerificationService implements IVerificationService {
 
         if (storedEntity.isEmpty()) {
             throw new ValidationException(new ErrorResponse(ErrorsTypes.ERROR.getMessage(),
-                    Messages.INCORRECT_VERIFICATION_CODE.getMessage()));
+                    ErrorMessages.INCORRECT_VERIFICATION_CODE.getMessage()));
         }
 
         Optional<User> user = crudUserDao.findByMail(storedEntity.get().getMail());

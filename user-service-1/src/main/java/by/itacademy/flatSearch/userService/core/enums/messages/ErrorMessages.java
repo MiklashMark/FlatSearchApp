@@ -1,6 +1,6 @@
-package by.itacademy.flatSearch.userService.core.enums;
+package by.itacademy.flatSearch.userService.core.enums.messages;
 
-public enum Messages {
+public enum ErrorMessages {
     INCORRECT_MAIL_FORMAT("Incorrect mail format."),
     PASSWORD_LENGTH_REQUIREMENT("Password length should be at least 8 characters." +
             " The password must include at least letters, digits, and one or more special characters."),
@@ -18,7 +18,7 @@ public enum Messages {
     USER_SUCCESSFULLY_ADDED("User successfully added.");
     private final String message;
 
-    Messages(String message) {
+    ErrorMessages(String message) {
         this.message = message;
     }
 

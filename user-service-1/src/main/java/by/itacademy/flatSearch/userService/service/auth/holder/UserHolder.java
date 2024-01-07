@@ -1,7 +1,5 @@
 package by.itacademy.flatSearch.userService.service.auth.holder;
 
-
-import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

@@ -5,7 +5,6 @@ public enum ErrorFieldNames {
     PASSWORD("password"),
     FIO("fio");
 
-
     private final String field;
 
     ErrorFieldNames(String field) {
