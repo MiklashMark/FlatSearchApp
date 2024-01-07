@@ -3,7 +3,7 @@ package by.itacademy.flatSearch.userService.service.auth;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
-import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
+import by.itacademy.flatSearch.userService.core.exceptions.exceptions.InternalServerException;
 import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
@@ -19,6 +19,7 @@ import java.util.*;
 public class MailQueueService implements IMailQueueService {
     private IVerificationDao verificationDao;
     private ISendMailService sendMailService;
+
     public MailQueueService(IVerificationDao verificationDao,
                             ISendMailService sendMailService) {
         this.verificationDao = verificationDao;
@@ -36,28 +37,30 @@ public class MailQueueService implements IMailQueueService {
         try {
             verificationDao.save(verificationUser);
         } catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
     }
 
 
     @Scheduled(fixedRate = 20000)
     private void sendMailMessage() {
-        Optional<VerificationEntity> verificationEntity = verificationDao.findFirstBySendFlagFalse();
+        VerificationEntity verificationEntity = verificationDao.findFirstBySendFlagFalse()
+                .orElseThrow(() ->
+                        new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage()));
 
-        if (verificationEntity.isPresent()) {
-            VerificationDTO verificationDTO = EntityDTOMapper.instance.verificationEntityToDTO(verificationEntity.get());
-            sendMailService.sendMailMessage(verificationDTO);
-            verificationEntity.get().setSended(true);
+        VerificationDTO verificationDTO = EntityDTOMapper
+                .instance.verificationEntityToDTO(verificationEntity);
+        sendMailService.sendMailMessage(verificationDTO);
+        verificationEntity.setSended(true);
 
-            try {
-                verificationDao.save(verificationEntity.get());
-            } catch (DataAccessException e) {
-                throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
-            }
-
+        try {
+            verificationDao.save(verificationEntity);
+        } catch (DataAccessException e) {
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
+
     }
+
     @Scheduled(cron = "0 50 23 * * ?")
     private void deleteMailMessage() {
         verificationDao.deleteAll();

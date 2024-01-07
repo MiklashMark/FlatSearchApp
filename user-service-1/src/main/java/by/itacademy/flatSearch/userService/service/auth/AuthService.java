@@ -1,12 +1,15 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
+import by.itacademy.flatSearch.userService.core.enums.UserStatus;
+import by.itacademy.flatSearch.userService.core.enums.messages.Messages;
+import by.itacademy.flatSearch.userService.core.exceptions.exceptions.AccountActivationException;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
-import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
+import by.itacademy.flatSearch.userService.core.exceptions.exceptions.InternalServerException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
@@ -45,9 +48,13 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public String login(UserLoginDTO LoginDTO) {
-        validationService.validateLogin(LoginDTO);
-        return tokenHandler.generateAccessToken(LoginDTO);
+    public String login(UserLoginDTO loginDTO) {
+        validationService.validateLogin(loginDTO);
+        User user = userDao.findByMail(loginDTO.getMail()).get();
+        if (!user.getStatus().equals(UserStatus.ACTIVATED)) {
+            throw new AccountActivationException(Messages.ACCOUNT_IS_NOT_ACTIVATED.getMessage());
+        }
+        return tokenHandler.generateAccessToken(loginDTO);
     }
     @Override
     public UserDTO get() {
@@ -67,7 +74,7 @@ public class AuthService implements IAuthService {
         try {
             userDao.save(user);
         } catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
 
         mailQueueService.addInMailQueue(user);

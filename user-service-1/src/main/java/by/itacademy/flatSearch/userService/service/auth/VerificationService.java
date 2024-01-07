@@ -1,19 +1,15 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
-import by.itacademy.flatSearch.userService.core.enums.ErrorsTypes;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
-import by.itacademy.flatSearch.userService.core.error.ErrorResponse;
-import by.itacademy.flatSearch.userService.core.exception.ValidationException;
+import by.itacademy.flatSearch.userService.core.exceptions.exceptions.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
 import by.itacademy.flatSearch.userService.service.auth.api.IVerificationService;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class VerificationService implements IVerificationService {
@@ -27,20 +23,15 @@ public class VerificationService implements IVerificationService {
 
     @Override
     public void verify(VerificationDTO verificationDTO) {
-        Optional<VerificationEntity> storedEntity = verificationDao.findByMailAndCode(verificationDTO.getMail(),
-                verificationDTO.getCode());
+        VerificationEntity storedEntity = verificationDao.findByMailAndCode(verificationDTO.getMail(),
+                verificationDTO.getCode()).orElseThrow(() ->
+                new ValidationException(ErrorMessages.INCORRECT_VERIFICATION_CODE.getMessage()));
 
-        if (storedEntity.isEmpty()) {
-            throw new ValidationException(new ErrorResponse(ErrorsTypes.ERROR.getMessage(),
-                    ErrorMessages.INCORRECT_VERIFICATION_CODE.getMessage()));
-        }
+        User user = crudUserDao.findByMail(storedEntity.getMail())
+                .orElseThrow(() -> new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage()));
 
-        Optional<User> user = crudUserDao.findByMail(storedEntity.get().getMail());
-
-        if (user.isPresent()) {
-            user.get().setStatus(UserStatus.ACTIVATED);
-            crudUserDao.save(user.get());
-            verificationDao.delete(storedEntity.get());     // Delete user im mail Queue table
-        }
+        user.setStatus(UserStatus.ACTIVATED);
+        crudUserDao.save(user);
+        verificationDao.delete(storedEntity);     // Delete user im mail Queue table
     }
 }

@@ -3,8 +3,8 @@ package by.itacademy.flatSearch.userService.service.user;
 import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
-import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
-import by.itacademy.flatSearch.userService.core.exception.ValidationException;
+import by.itacademy.flatSearch.userService.core.exceptions.exceptions.InternalServerException;
+import by.itacademy.flatSearch.userService.core.exceptions.exceptions.ValidationException;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
@@ -40,7 +40,7 @@ public class UserService implements IUserService {
         try {
             userDao.save(user);
         } catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
     }
 
@@ -57,7 +57,7 @@ public class UserService implements IUserService {
             return EntityDTOMapper.instance.userEntityToUserDTO(user);
 
         }  catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
     }
 
@@ -69,7 +69,7 @@ public class UserService implements IUserService {
           return EntityDTOMapper.instance.userEntityToUserDTO(user);
 
         }  catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
+            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
-package by.itacademy.flatSearch.userService.core.exception;
+package by.itacademy.flatSearch.userService.core.exceptions.exceptions;
 
+import by.itacademy.flatSearch.userService.core.enums.ErrorsTypes;
 import by.itacademy.flatSearch.userService.core.error.ErrorResponse;
 import by.itacademy.flatSearch.userService.core.error.StructuredErrorResponse;
 import lombok.Getter;
@@ -8,22 +9,18 @@ import lombok.Getter;
 public class ValidationException extends IllegalArgumentException {
     private StructuredErrorResponse structuredErrorResponse;
     private ErrorResponse errorResponse;
+    private boolean isStructuredError;
 
     public ValidationException(StructuredErrorResponse errorResponse) {
+        isStructuredError = true;
         this.structuredErrorResponse = errorResponse;
-        errorResponse.setLogRef("structured_error");
-    }
-
-
-    public ValidationException(ErrorResponse errorResponse) {
-        this.errorResponse = errorResponse;
-        errorResponse.setLogRef("error");
+        errorResponse.setLogRef(ErrorsTypes.STRUCTURED_ERROR.getMessage());
     }
 
     public ValidationException(String message) {
         super(message);
         errorResponse = new ErrorResponse();
         errorResponse.setMessage(message);
-        errorResponse.setLogRef("error");
+        errorResponse.setLogRef(ErrorsTypes.ERROR.getMessage());
     }
 }
