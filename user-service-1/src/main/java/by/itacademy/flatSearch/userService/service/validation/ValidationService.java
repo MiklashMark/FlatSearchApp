@@ -1,5 +1,6 @@
-package by.itacademy.flatSearch.userService.service.auth.validation;
+package by.itacademy.flatSearch.userService.service.validation;
 
+import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.ErrorFieldNames;
@@ -38,7 +39,7 @@ public class ValidationService implements IValidationService {
         validateMail(registrationDTO.getMail());
         validateFio(registrationDTO.getFio());
         validatePassword(registrationDTO.getPassword());
-        checkIfUserExists(registrationDTO);
+        checkIfUserExists(registrationDTO.getMail());
 
         if (!errorsResponse.getErrors().isEmpty()) {
             throw new ValidationException(errorsResponse);
@@ -61,6 +62,20 @@ public class ValidationService implements IValidationService {
         if (!errorsResponse.getErrors().isEmpty()) {
             throw new ValidationException(errorsResponse);
         }
+    }
+
+    @Override
+    public void validateCreation(UserCreateDTO createDTO) {
+        errorsResponse = new StructuredErrorResponse();
+        validateMail(createDTO.getMail());
+        validateFio(createDTO.getFio());
+        validatePassword(createDTO.getPassword());
+        checkIfUserExists(createDTO.getMail());
+
+        if (!errorsResponse.getErrors().isEmpty()) {
+            throw new ValidationException(errorsResponse);
+        }
+
     }
 
     private void validateMail(String mail) {
@@ -95,9 +110,9 @@ public class ValidationService implements IValidationService {
         }
     }
 
-    private void checkIfUserExists(UserRegistrationDTO user) {
-        if (crudUserDao.existsByMail(user.getMail())) {
-            addError(ErrorFieldNames.MAIL.getField(), ErrorMessages.EMAIL_ALREADY_REGISTERED.getMessage());
+    private void checkIfUserExists(String mail) {
+        if (crudUserDao.existsByMail(mail)) {
+            addError(ErrorFieldNames.MAIL.getField(), ErrorMessages.ALREADY_REGISTERED.getMessage());
         }
     }
 
@@ -105,6 +120,7 @@ public class ValidationService implements IValidationService {
         ErrorDetail error = new ErrorDetail(field, message);
         errorsResponse.addError(error);
     }
+
     private String getCorrectPassword(String mail) {
         try {
             Optional<User> user = crudUserDao.findByMail(mail);

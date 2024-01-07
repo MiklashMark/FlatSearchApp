@@ -7,19 +7,16 @@ import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
-import by.itacademy.flatSearch.userService.core.exception.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.service.auth.api.IAuthService;
 import by.itacademy.flatSearch.userService.service.auth.api.IMailQueueService;
 import by.itacademy.flatSearch.userService.service.auth.holder.UserHolder;
-import by.itacademy.flatSearch.userService.service.auth.validation.IValidationService;
+import by.itacademy.flatSearch.userService.service.validation.IValidationService;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class AuthService implements IAuthService {
@@ -48,8 +45,9 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public String login(UserLoginDTO userLoginDTO) {
-        return tokenHandler.generateAccessToken(userLoginDTO);
+    public String login(UserLoginDTO LoginDTO) {
+        validationService.validateLogin(LoginDTO);
+        return tokenHandler.generateAccessToken(LoginDTO);
     }
     @Override
     public UserDTO get() {
@@ -58,11 +56,11 @@ public class AuthService implements IAuthService {
 
 
     @Override
-    public void save(UserRegistrationDTO userRegistration) {
-        validationService.validateRegistration(userRegistration);
+    public void save(UserRegistrationDTO registrationDTO) {
+        validationService.validateRegistration(registrationDTO);
 
-        User user = EntityDTOMapper.instance.userRegistrationDTOToUserEntity(userRegistration);
-        user.setPassword(validationService.encodePassword(userRegistration.getPassword()));
+        User user = EntityDTOMapper.instance.userRegistrationDTOToUserEntity(registrationDTO);
+        user.setPassword(validationService.encodePassword(registrationDTO.getPassword()));
         user.setDataCreate(System.currentTimeMillis());
         user.setDataUpdate(System.currentTimeMillis());
 

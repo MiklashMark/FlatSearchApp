@@ -9,6 +9,7 @@ import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.service.user.api.IUserService;
+import by.itacademy.flatSearch.userService.service.validation.IValidationService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,18 @@ import java.util.UUID;
 public class UserService implements IUserService {
     private final ICRUDUserDao userDao;
     private PasswordEncoder passwordEncoder;
+    private IValidationService validationService;
 
-    public UserService(ICRUDUserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(ICRUDUserDao userDao, PasswordEncoder passwordEncoder, IValidationService validationService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.validationService = validationService;
     }
 
     @Override
     public void save(UserCreateDTO userCreateDTO) {
+        validationService.validateCreation(userCreateDTO);
+
         User user = EntityDTOMapper.instance.convertUserCreateDTOToUserEntity(userCreateDTO);
 
         user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
