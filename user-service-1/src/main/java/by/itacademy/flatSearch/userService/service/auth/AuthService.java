@@ -22,11 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Transactional(readOnly = true)
 public class AuthService implements IAuthService {
     private final IValidationService validationService;
     private final IUserService userService;
     private final ICRUDUserDao userDao;
-    private final IMailQueueService mailQueueService;
+    private  IMailQueueService mailQueueService;
     private final UserHolder holder;
     private JwtTokenHandler tokenHandler;
 
@@ -47,7 +48,7 @@ public class AuthService implements IAuthService {
     public String login(UserLoginDTO loginDTO) {
         validationService.validateLogin(loginDTO);
         UserDTO userDTO = userService.get(loginDTO);
-        if (!userDTO.getStatus().equals(UserStatus.ACTIVATED)) {
+        if (userDTO.getStatus().equals(UserStatus.ACTIVATED)) {
             throw new AccountActivationException(Messages.ACCOUNT_IS_NOT_ACTIVATED.getMessage());
         }
         return tokenHandler.generateAccessToken(loginDTO);

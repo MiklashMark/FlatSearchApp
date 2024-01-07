@@ -10,7 +10,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface IVerificationDao extends JpaRepository<VerificationEntity, UUID> {
+public interface IMailQueueDao extends JpaRepository<VerificationEntity, UUID> {
 
     Optional<VerificationEntity> findFirstBySendFlagFalse();
     Optional<VerificationEntity> findByMailAndCode(String mail, String code);

@@ -5,7 +5,7 @@ import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
-import by.itacademy.flatSearch.userService.dao.api.IVerificationDao;
+import by.itacademy.flatSearch.userService.dao.api.IMailQueueDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
 import by.itacademy.flatSearch.userService.service.auth.api.IVerificationService;
@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class VerificationService implements IVerificationService {
-    private IVerificationDao verificationDao;
+    private IMailQueueDao verificationDao;
     private ICRUDUserDao crudUserDao;
 
-    public VerificationService(IVerificationDao verificationDao, ICRUDUserDao crudUserDao) {
+    public VerificationService(IMailQueueDao verificationDao, ICRUDUserDao crudUserDao) {
         this.verificationDao = verificationDao;
         this.crudUserDao = crudUserDao;
     }
