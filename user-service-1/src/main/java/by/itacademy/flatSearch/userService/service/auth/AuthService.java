@@ -26,7 +26,6 @@ public class AuthService implements IAuthService {
     private final IValidationService validationService;
     private final ICRUDUserDao userDao;
     private final IMailQueueService mailQueueService;
-    private PasswordEncoder passwordEncoder;
     private IVerificationDao verificationDao;
     private ICRUDUserDao crudUserDao;
     private final UserHolder holder;
@@ -35,30 +34,21 @@ public class AuthService implements IAuthService {
     public AuthService(IValidationService validationService,
                        ICRUDUserDao userDao,
                        IMailQueueService mailQueueService,
-                       PasswordEncoder passwordEncoder,
                        IVerificationDao verificationDao,
-                       ICRUDUserDao crudUserDao,
                        UserHolder holder,
-                       ICRUDUserDao crudUserDao1,
+                       ICRUDUserDao crudUserDao,
                        JwtTokenHandler tokenHandler) {
         this.validationService = validationService;
         this.userDao = userDao;
         this.mailQueueService = mailQueueService;
-        this.passwordEncoder = passwordEncoder;
         this.verificationDao = verificationDao;
         this.holder = holder;
-        this.crudUserDao = crudUserDao1;
+        this.crudUserDao = crudUserDao;
         this.tokenHandler = tokenHandler;
     }
 
     @Override
     public String login(UserLoginDTO userLoginDTO) {
-        String correctPassword = getCorrectPassword(userLoginDTO.getMail());
-
-        if (!passwordEncoder.matches(userLoginDTO.getPassword(), correctPassword)) {
-            throw new ValidationException(ErrorMessages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
-        }
-
         return tokenHandler.generateAccessToken(userLoginDTO);
     }
     @Override
@@ -69,10 +59,10 @@ public class AuthService implements IAuthService {
 
     @Override
     public void save(UserRegistrationDTO userRegistration) {
-        validationService.registrationValidation(userRegistration);
+        validationService.validateRegistration(userRegistration);
 
         User user = EntityDTOMapper.instance.userRegistrationDTOToUserEntity(userRegistration);
-        user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
+        user.setPassword(validationService.encodePassword(userRegistration.getPassword()));
         user.setDataCreate(System.currentTimeMillis());
         user.setDataUpdate(System.currentTimeMillis());
 
@@ -84,17 +74,4 @@ public class AuthService implements IAuthService {
 
         mailQueueService.addInMailQueue(user);
     }
-
-    private String getCorrectPassword(String mail) {
-        try {
-            Optional<User> user = crudUserDao.findByMail(mail);
-            if (user.isEmpty()) {
-                throw new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage());
-            }
-            return user.get().getPassword();
-        } catch (DataAccessException e) {
-            throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage(), e);
-        }
-    }
-
 }

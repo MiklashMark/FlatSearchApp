@@ -9,13 +9,14 @@ public enum ErrorMessages {
     FIO_ALREADY_EXISTS("A user with the same name already exists"),
     SERVER_ERROR("The server was unable to process the request correctly." +
             " Please contact your administrator"),
-    REGISTERED_SUCCESSFULLY("Registered successfully." +
-            " You should receive a confirmation link/code to your email."),
+
     INCORRECT_VERIFICATION_CODE("Incorrect code. Try again."),
-    VERIFIED_SUCCESSFULLY("Verification successfully"),
     INCORRECT_MAIL_OR_PASSWORD("Login or password is incorrect"),
     USER_NOT_FOUND("User not found!"),
-    USER_SUCCESSFULLY_ADDED("User successfully added.");
+    MAIL_IS_EMPTY("Mail field is empty"),
+    PASSWORD_IS_EMPTY("Password field is empty"),
+    FIO_IS_EMPTY("Fio field is empty");
+
     private final String message;
 
     ErrorMessages(String message) {
