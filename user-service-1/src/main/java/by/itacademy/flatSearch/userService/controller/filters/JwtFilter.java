@@ -1,5 +1,7 @@
 package by.itacademy.flatSearch.userService.controller.filters;
 
+import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
+import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
 import by.itacademy.flatSearch.userService.service.user.api.IUserService;
 import jakarta.servlet.FilterChain;
@@ -9,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -50,12 +51,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserDetails userDetails = userService.get(jwtHandler.getMail(token));
+        UserDTO userDTO = userService.get(jwtHandler.getMail(token));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null,
-                userDetails.getAuthorities()
+                userDTO, null,
+                userDTO.getAuthorities()
         );
 
         authentication.setDetails(

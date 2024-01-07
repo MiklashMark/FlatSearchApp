@@ -1,7 +1,7 @@
 package by.itacademy.flatSearch.userService.core.utils;
 
 import by.itacademy.flatSearch.userService.config.security.properties.JWTProperty;
-import by.itacademy.flatSearch.userService.core.dto.LoginDTO;
+import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class JwtTokenHandler {
         this.property = property;
     }
 
-    public String generateAccessToken(LoginDTO user) {
+    public String generateAccessToken(UserLoginDTO user) {
         return generateAccessToken(user.getMail());
     }
 

@@ -1,20 +1,22 @@
 package by.itacademy.flatSearch.userService.service.user;
 
+import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
-import by.itacademy.flatSearch.userService.core.dto.UserInfDTO;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
+import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.service.user.api.IUserService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+@Service
 public class UserService implements IUserService {
     private final ICRUDUserDao userDao;
     private PasswordEncoder passwordEncoder;
@@ -25,14 +27,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void save(UserDTO userDTO) {
-        User user = new User();
-        user.setFio(userDTO.getFio());
-        user.setMail(userDTO.getMail());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setStatus(userDTO.getStatus());
-        user.setRole(userDTO.getRole());
-        user.setUuid(UUID.randomUUID());
+    public void save(UserCreateDTO userCreateDTO) {
+        User user = EntityDTOMapper.instance.convertUserCreateDTOToUserEntity(userCreateDTO);
+
+        user.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
+
 
         try {
             userDao.save(user);
@@ -42,32 +41,36 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return null;
     }
 
     @Override
-    public UserInfDTO get(UUID uuid) {
+    public UserDTO get(UUID uuid) {
         try {
-            return userDao.findByUuid(uuid)
+            User user = userDao.findByUuid(uuid)
                     .orElseThrow(() -> new ValidationException(Messages.USER_NOT_FOUND.getMessage()));
+            return EntityDTOMapper.instance.userEntityToUserDTO(user);
+
         }  catch (DataAccessException e) {
             throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
         }
     }
 
     @Override
-    public User get(String mail) {
+    public UserDTO get(String mail) {
         try {
-            return userDao.findByMail(mail)
+            User user = userDao.findByMail(mail)
                     .orElseThrow(() -> new ValidationException(Messages.USER_NOT_FOUND.getMessage()));
+          return EntityDTOMapper.instance.userEntityToUserDTO(user);
+
         }  catch (DataAccessException e) {
             throw new InternalServerException(Messages.SERVER_ERROR.getMessage(), e);
         }
     }
 
     @Override
-    public UserDTO update(UUID uuid, long dtUpdate) {
-        return null;
+    public void update(UUID uuid, long dtUpdate) {
+
     }
 }

@@ -12,14 +12,16 @@ import java.util.*;
 
 @Entity
 @Table(schema = "users",  name = "users")
-public class User implements UserDetails{
+public class User {
     @Id
+    @GeneratedValue
+    @Column(unique = true)
     private UUID uuid;
     @Column(name = "dt_create", nullable = false)
     private long dataCreate;
     @Column(name = "dt_update", nullable = false)
     private long dataUpdate;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String mail;
     @Column(nullable = false)
     private String password;
@@ -50,38 +52,10 @@ public class User implements UserDetails{
         this.status = status;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role.name()));
-    }
+
 
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return mail;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 
     public void setPassword(String password) {

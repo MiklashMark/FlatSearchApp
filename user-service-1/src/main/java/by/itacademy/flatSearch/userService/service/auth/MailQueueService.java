@@ -19,14 +19,10 @@ import java.util.*;
 public class MailQueueService implements IMailQueueService {
     private IVerificationDao verificationDao;
     private ISendMailService sendMailService;
-    private EntityDTOMapper mapper;
-
     public MailQueueService(IVerificationDao verificationDao,
-                            ISendMailService sendMailService,
-                            EntityDTOMapper mapper) {
+                            ISendMailService sendMailService) {
         this.verificationDao = verificationDao;
         this.sendMailService = sendMailService;
-        this.mapper = mapper;
     }
 
     @Override
@@ -50,7 +46,7 @@ public class MailQueueService implements IMailQueueService {
         Optional<VerificationEntity> verificationEntity = verificationDao.findFirstBySendFlagFalse();
 
         if (verificationEntity.isPresent()) {
-            VerificationDTO verificationDTO = mapper.convertVerificationEntityToDTO(verificationEntity.get());
+            VerificationDTO verificationDTO = EntityDTOMapper.instance.verificationEntityToDTO(verificationEntity.get());
             sendMailService.sendMailMessage(verificationDTO);
             verificationEntity.get().setSended(true);
 

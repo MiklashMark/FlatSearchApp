@@ -1,5 +1,7 @@
 package by.itacademy.flatSearch.userService.core.dto;
 
+import by.itacademy.flatSearch.userService.core.enums.UserRole;
+import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,13 +14,10 @@ import java.util.Collections;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserCreateDTO {
     private String mail;
     private String fio;
-    private String role;
-    private String status;
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role));
-    }
+    private UserRole role;
+    private UserStatus status;
+    private String password;
 }

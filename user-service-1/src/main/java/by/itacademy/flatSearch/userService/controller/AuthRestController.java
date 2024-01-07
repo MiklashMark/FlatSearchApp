@@ -1,6 +1,6 @@
 package by.itacademy.flatSearch.userService.controller;
 
-import by.itacademy.flatSearch.userService.core.dto.LoginDTO;
+import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
@@ -21,8 +21,8 @@ public class AuthRestController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO loginDTO) {
-        return authService.login(loginDTO);
+    public String login(@RequestBody UserLoginDTO userLoginDTO) {
+        return authService.login(userLoginDTO);
     }
 
     @GetMapping("/me")

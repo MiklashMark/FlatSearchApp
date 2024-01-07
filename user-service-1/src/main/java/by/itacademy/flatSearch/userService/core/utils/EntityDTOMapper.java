@@ -1,5 +1,6 @@
 package by.itacademy.flatSearch.userService.core.utils;
 
+import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
@@ -9,34 +10,41 @@ import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.UUID;
-
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EntityDTOMapper {
+  EntityDTOMapper instance = Mappers.getMapper(EntityDTOMapper.class);
 
-    public VerificationDTO convertVerificationEntityToDTO(VerificationEntity entity);
-    public  VerificationEntity convertVerificationDTOToEntity(VerificationDTO dto);
-
+    VerificationDTO verificationEntityToDTO(VerificationEntity entity);
+    VerificationEntity verificationDTOToEntity(VerificationDTO dto);
 
     @Mapping(target = "password", ignore = true)
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "dtUpdate", ignore = true)
+    @Mapping(target = "dtCreate", ignore = true)
+    UserDTO userEntityToUserDTO(User user);
+    @Mapping(target = "uuid", ignore = true)
     @Mapping(target = "dataCreate", ignore = true)
     @Mapping(target = "dataUpdate", ignore = true)
-    UserDTO convertUserEntityToDTO(User user);
+    @Mapping(target = "password", ignore = true)
+    User convertUserDTOToUserEntity(UserDTO user);
 
-
-    default User convertUserRegistrationDTOToUserEntity(UserRegistrationDTO userRegistrationDTO) {
+    default User userRegistrationDTOToUserEntity(UserRegistrationDTO userRegistrationDTO) {
         User user = new User();
-        user.setUuid(UUID.randomUUID());
         user.setMail(userRegistrationDTO.getMail());
         user.setFio(userRegistrationDTO.getFio());
         user.setStatus(UserStatus.WAITING_ACTIVATION);
         user.setRole(UserRole.USER);
-        user.setDataCreate(System.currentTimeMillis());
-        user.setDataUpdate(System.currentTimeMillis());
         return user;
     }
-
-
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "dataCreate", ignore = true)
+    @Mapping(target = "dataUpdate", ignore = true)
+    User convertUserCreateDTOToUserEntity(UserCreateDTO user);
+    @Mapping(target = "uuid", ignore = true)
+    @Mapping(target = "dataCreate", ignore = true)
+    @Mapping(target = "dataUpdate", ignore = true)
+    User convertUserEntityToUserCreateDTO(UserDTO user);
 
 }

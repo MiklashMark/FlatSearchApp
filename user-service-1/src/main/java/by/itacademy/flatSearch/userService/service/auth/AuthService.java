@@ -1,12 +1,12 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
+import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
+import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
-import by.itacademy.flatSearch.userService.core.dto.LoginDTO;
+import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.Messages;
-import by.itacademy.flatSearch.userService.core.enums.UserRole;
-import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import by.itacademy.flatSearch.userService.core.exception.InternalServerException;
 import by.itacademy.flatSearch.userService.core.exception.ValidationException;
 import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
@@ -17,13 +17,10 @@ import by.itacademy.flatSearch.userService.service.auth.api.IMailQueueService;
 import by.itacademy.flatSearch.userService.service.auth.holder.UserHolder;
 import by.itacademy.flatSearch.userService.service.auth.validation.IValidationService;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthService implements IAuthService {
@@ -35,7 +32,6 @@ public class AuthService implements IAuthService {
     private ICRUDUserDao crudUserDao;
     private final UserHolder holder;
     private JwtTokenHandler tokenHandler;
-    private EntityDTOMapper mapper;
 
     public AuthService(IValidationService validationService,
                        ICRUDUserDao userDao,
@@ -51,24 +47,23 @@ public class AuthService implements IAuthService {
         this.mailQueueService = mailQueueService;
         this.passwordEncoder = passwordEncoder;
         this.verificationDao = verificationDao;
-        this.crudUserDao = crudUserDao;
         this.holder = holder;
         this.crudUserDao = crudUserDao1;
         this.tokenHandler = tokenHandler;
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
-        String correctPassword = getCorrectPassword(loginDTO.getMail());
+    public String login(UserLoginDTO userLoginDTO) {
+        String correctPassword = getCorrectPassword(userLoginDTO.getMail());
 
-        if (!passwordEncoder.matches(loginDTO.getPassword(), correctPassword)) {
+        if (!passwordEncoder.matches(userLoginDTO.getPassword(), correctPassword)) {
             throw new ValidationException(Messages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
         }
 
-        return tokenHandler.generateAccessToken(loginDTO);
+        return tokenHandler.generateAccessToken(userLoginDTO);
     }
     @Override
-    public UserDetails get() {
+    public UserDTO get() {
         return holder.getUser();
     }
 
@@ -77,8 +72,10 @@ public class AuthService implements IAuthService {
     public void save(UserRegistrationDTO userRegistration) {
         validationService.validateUser(userRegistration);
 
-        User user = mapper.convertUserRegistrationDTOToUserEntity(userRegistration);
+        User user = EntityDTOMapper.instance.userRegistrationDTOToUserEntity(userRegistration);
         user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
+        user.setDataCreate(System.currentTimeMillis());
+        user.setDataUpdate(System.currentTimeMillis());
 
         try {
             userDao.save(user);

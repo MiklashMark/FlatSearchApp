@@ -14,7 +14,8 @@ public enum Messages {
     INCORRECT_VERIFICATION_CODE("Incorrect code. Try again."),
     VERIFIED_SUCCESSFULLY("Verification successfully"),
     INCORRECT_MAIL_OR_PASSWORD("Login or password is incorrect"),
-    USER_NOT_FOUND("User not found!");
+    USER_NOT_FOUND("User not found!"),
+    USER_SUCCESSFULLY_ADDED("User successfully added.");
     private final String message;
 
     Messages(String message) {
