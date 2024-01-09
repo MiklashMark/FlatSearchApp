@@ -1,17 +1,17 @@
 package by.itacademy.flatSearch.userService.service.user.api;
 
-import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
-import by.itacademy.flatSearch.userService.core.dto.UserDTO;
+import by.itacademy.flatSearch.userService.core.dto.PageOfUserDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
+import by.itacademy.flatSearch.userService.dao.entity.User;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface IUserService {
-    void save(UserCreateDTO userCreateDTO);
-    List<UserDTO> getUsers();
-    UserDTO get(UUID id);
-    UserDTO get(String mail);
-    UserDTO get(UserLoginDTO loginDTO);
+    void save(User user);
+    PageOfUserDTO getPage(Pageable pageable);
+    User get(UUID id);
+    User get(String mail);
+    User get(UserLoginDTO loginDTO);
     void update(UUID uuid, long dtUpdate);
 }

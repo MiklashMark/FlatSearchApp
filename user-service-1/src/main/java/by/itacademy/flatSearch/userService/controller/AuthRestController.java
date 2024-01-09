@@ -1,47 +1,44 @@
 package by.itacademy.flatSearch.userService.controller;
 
+import by.itacademy.flatSearch.userService.controller.converter.api.IAuthConverter;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
-import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
+import by.itacademy.flatSearch.userService.core.dto.VerificationMailDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.Messages;
-import by.itacademy.flatSearch.userService.service.auth.api.IAuthService;
 import by.itacademy.flatSearch.userService.service.auth.api.IVerificationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@Transactional(readOnly = true)
 public class AuthRestController {
     private final IVerificationService verificationService;
-    private final IAuthService authService;
+    private final IAuthConverter authConverter;
 
-    public AuthRestController(IVerificationService verificationService, IAuthService authService) {
+    public AuthRestController(IVerificationService verificationService, IAuthConverter authConverter) {
         this.verificationService = verificationService;
-        this.authService = authService;
+        this.authConverter = authConverter;
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserLoginDTO userLoginDTO) {
-        return authService.login(userLoginDTO);
+        return authConverter.login(userLoginDTO);
     }
 
     @GetMapping("/me")
     public ResponseEntity<String> getPersonalInfo() {
-        return ResponseEntity.ok().body(authService.get().toString());
+        return ResponseEntity.ok().body(authConverter.get().toString());
     }
 
     @PostMapping("/registration")
-    @Transactional
     public ResponseEntity<String> register(@RequestBody UserRegistrationDTO userRegistration) {
-        authService.save(userRegistration);
+        authConverter.save(userRegistration);
         return ResponseEntity.status(201).body(Messages.REGISTERED_SUCCESSFULLY.getMessage());
     }
 
     @GetMapping("/verification")
-    public ResponseEntity<String> verify(VerificationDTO verificationDTO) {
-        verificationService.verify(verificationDTO);
+    public ResponseEntity<String> verify(@RequestBody VerificationMailDTO verificationMailDTO) {
+        authConverter.verify(verificationMailDTO);
         return ResponseEntity.ok(Messages.VERIFIED_SUCCESSFULLY.getMessage());
     }
 }

@@ -1,12 +1,12 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
+import by.itacademy.flatSearch.userService.core.dto.VerificationMailDTO;
 import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
-import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.InternalServerException;
 import by.itacademy.flatSearch.userService.dao.api.IMailQueueDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
-import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
+import by.itacademy.flatSearch.userService.dao.entity.VerificationMailEntity;
 import by.itacademy.flatSearch.userService.service.auth.api.ISendMailService;
 import by.itacademy.flatSearch.userService.service.auth.api.IMailQueueService;
 import org.springframework.dao.DataAccessException;
@@ -18,8 +18,8 @@ import java.util.*;
 @Service
 @Transactional(readOnly = true)
 public class MailQueueService implements IMailQueueService {
-    private IMailQueueDao verificationDao;
-    private ISendMailService sendMailService;
+    private final IMailQueueDao verificationDao;
+    private final ISendMailService sendMailService;
 
     public MailQueueService(IMailQueueDao verificationDao,
                             ISendMailService sendMailService) {
@@ -30,7 +30,7 @@ public class MailQueueService implements IMailQueueService {
     @Override
     @Transactional
     public void addInMailQueue(User user) {
-        VerificationEntity verificationUser = new VerificationEntity();
+        VerificationMailEntity verificationUser = new VerificationMailEntity();
         verificationUser.setUuid(UUID.randomUUID());
         verificationUser.setCode(generateCode());
         verificationUser.setMail(user.getMail());
@@ -48,17 +48,17 @@ public class MailQueueService implements IMailQueueService {
     @Transactional
     protected void sendMailMessage() {
         if (verificationDao.findFirstBySendFlagFalse().isPresent()) {
-            VerificationEntity verificationEntity = verificationDao.findFirstBySendFlagFalse()
+            VerificationMailEntity verificationMailEntity = verificationDao.findFirstBySendFlagFalse()
                     .orElseThrow(() ->
                             new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage()));
 
-            VerificationDTO verificationDTO = EntityDTOMapper
-                    .INSTANCE.verificationEntityToDTO(verificationEntity);
-            sendMailService.sendMailMessage(verificationDTO);
-            verificationEntity.setSended(true);
+            VerificationMailDTO verificationMailDTO = EntityDTOMapper
+                    .INSTANCE.verificationEntityToDTO(verificationMailEntity);
+            sendMailService.sendMailMessage(verificationMailDTO);
+            verificationMailEntity.setSended(true);
 
             try {
-                verificationDao.save(verificationEntity);
+                verificationDao.save(verificationMailEntity);
             } catch (DataAccessException e) {
                 throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
             }

@@ -1,20 +1,21 @@
 package by.itacademy.flatSearch.userService.core.utils;
 
 import by.itacademy.flatSearch.userService.core.dto.*;
-import by.itacademy.flatSearch.userService.core.enums.UserRole;
-import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import by.itacademy.flatSearch.userService.dao.entity.User;
-import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
+import by.itacademy.flatSearch.userService.dao.entity.VerificationMailEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EntityDTOMapper {
   EntityDTOMapper INSTANCE = Mappers.getMapper(EntityDTOMapper.class);
 
-    VerificationDTO verificationEntityToDTO(VerificationEntity entity);
-    VerificationEntity verificationDTOToEntity(VerificationDTO dto);
+    VerificationMailDTO verificationEntityToDTO(VerificationMailEntity entity);
+    VerificationMailEntity verificationDTOToEntity(VerificationMailDTO dto);
 
 
     UserDTO userEntityToUserDTO(User user);
@@ -28,6 +29,9 @@ public interface EntityDTOMapper {
         User user = new User();
         user.setMail(userRegistrationDTO.getMail());
         user.setFio(userRegistrationDTO.getFio());
+        user.setPassword(userRegistrationDTO.getPassword());
+        user.setDataUpdate(System.currentTimeMillis());
+        user.setDataCreate(System.currentTimeMillis());
         return user;
     }
     @Mapping(target = "uuid", ignore = true)
@@ -47,4 +51,8 @@ public interface EntityDTOMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "fio", ignore = true)
     UserCreateDTO convertUserLoginDTOToUserCreateDTO(UserLoginDTO userDTO);
+
+    default List<UserDTO> convertUserListToUserDTOList(List<User> users) {
+        return users.stream().map(INSTANCE :: userEntityToUserDTO).toList();
+    }
 }

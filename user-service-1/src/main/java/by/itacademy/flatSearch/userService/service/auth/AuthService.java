@@ -1,22 +1,20 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
-import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
-import by.itacademy.flatSearch.userService.core.dto.UserDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserLoginDTO;
-import by.itacademy.flatSearch.userService.core.dto.UserRegistrationDTO;
 import by.itacademy.flatSearch.userService.core.enums.UserRole;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
+import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.enums.messages.Messages;
 import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.AccountActivationException;
-import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
+import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.ValidationException;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
-import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
 import by.itacademy.flatSearch.userService.service.auth.api.IAuthService;
 import by.itacademy.flatSearch.userService.service.auth.api.IMailQueueService;
 import by.itacademy.flatSearch.userService.service.auth.holder.UserHolder;
 import by.itacademy.flatSearch.userService.service.user.api.IUserService;
 import by.itacademy.flatSearch.userService.service.validation.IValidationService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,57 +24,60 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService implements IAuthService {
     private final IValidationService validationService;
     private final IUserService userService;
-    private final ICRUDUserDao userDao;
-    private  IMailQueueService mailQueueService;
+    private final IMailQueueService mailQueueService;
     private final UserHolder holder;
-    private JwtTokenHandler tokenHandler;
+    private final JwtTokenHandler tokenHandler;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthService(IValidationService validationService,
-                       IUserService userService, ICRUDUserDao userDao,
+                       IUserService userService,
                        IMailQueueService mailQueueService,
                        UserHolder holder,
-                       JwtTokenHandler tokenHandler) {
+                       JwtTokenHandler tokenHandler,
+                       PasswordEncoder passwordEncoder) {
         this.validationService = validationService;
         this.userService = userService;
-        this.userDao = userDao;
         this.mailQueueService = mailQueueService;
         this.holder = holder;
         this.tokenHandler = tokenHandler;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public String login(UserLoginDTO loginDTO) {
         validationService.validateLogin(loginDTO);
-        UserDTO userDTO = userService.get(loginDTO);
-        if (userDTO.getStatus().equals(UserStatus.ACTIVATED)) {
+        User user = userService.get(loginDTO);
+
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new ValidationException(ErrorMessages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
+        }
+        if (user.getStatus() != UserStatus.ACTIVATED) {
             throw new AccountActivationException(Messages.ACCOUNT_IS_NOT_ACTIVATED.getMessage());
         }
         return tokenHandler.generateAccessToken(loginDTO);
     }
+
     @Override
-    public UserDTO get() {
+    public User get() {
         return holder.getUser();
     }
 
 
     @Override
     @Transactional
-    public void save(UserRegistrationDTO registrationDTO) {
-        validationService.validateRegistration(registrationDTO);
+    public void save(User user) {
+        validationService.validateRegistration(user);
 
-        User user = EntityDTOMapper.INSTANCE.userRegistrationDTOToUserEntity(registrationDTO);
-        user.setPassword(validationService.encodePassword(registrationDTO.getPassword()));
+        user.setPassword(encodePassword(user.getPassword()));
         user.setStatus(UserStatus.WAITING_ACTIVATION);
         user.setRole(UserRole.USER);
-        user.setDataCreate(System.currentTimeMillis());
-        user.setDataUpdate(System.currentTimeMillis());
 
-        UserCreateDTO userCreateDTO = EntityDTOMapper
-                .INSTANCE.convertUserRegistrationDTOToUserCreateDTO(registrationDTO);
-        userCreateDTO.setRole(UserRole.USER);
-        userCreateDTO.setStatus(UserStatus.WAITING_ACTIVATION);
-        userService.save(userCreateDTO);
-
+        userService.save(user);
         mailQueueService.addInMailQueue(user);
+    }
+
+    @Override
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
     }
 }

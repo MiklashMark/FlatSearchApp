@@ -2,6 +2,7 @@ package by.itacademy.flatSearch.userService.controller.filters;
 
 import by.itacademy.flatSearch.userService.core.dto.UserCreateDTO;
 import by.itacademy.flatSearch.userService.core.dto.UserDTO;
+import by.itacademy.flatSearch.userService.core.utils.EntityDTOMapper;
 import by.itacademy.flatSearch.userService.core.utils.JwtTokenHandler;
 import by.itacademy.flatSearch.userService.service.user.api.IUserService;
 import jakarta.servlet.FilterChain;
@@ -51,7 +52,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserDTO userDTO = userService.get(jwtHandler.getMail(token));
+        UserDTO userDTO = EntityDTOMapper.INSTANCE
+                .userEntityToUserDTO(userService.get(jwtHandler.getMail(token)));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(

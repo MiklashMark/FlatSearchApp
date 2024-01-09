@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(schema = "users", name = "mail_queue")
-public class VerificationEntity {
+public class VerificationMailEntity {
     @Id
     private UUID uuid;
     private String code;
@@ -18,14 +18,14 @@ public class VerificationEntity {
     @Column(name = "send_flag")
     private boolean sendFlag;
 
-    public VerificationEntity(UUID uuid, String code, String mail, boolean isSended) {
+    public VerificationMailEntity(UUID uuid, String code, String mail, boolean isSended) {
         this.uuid = uuid;
         this.code = code;
         this.mail = mail;
         this.sendFlag = isSended;
     }
 
-    public VerificationEntity() {
+    public VerificationMailEntity() {
     }
 
     public String getCode() {
@@ -64,7 +64,7 @@ public class VerificationEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VerificationEntity that = (VerificationEntity) o;
+        VerificationMailEntity that = (VerificationMailEntity) o;
         return sendFlag == that.sendFlag && Objects.equals(uuid, that.uuid) && Objects.equals(code, that.code) && Objects.equals(mail, that.mail);
     }
 

@@ -1,24 +1,25 @@
 package by.itacademy.flatSearch.userService.controller.resolver;
 
 
-import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
+import by.itacademy.flatSearch.userService.core.dto.VerificationMailDTO;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-public class VerificationResolver implements HandlerMethodArgumentResolver {
+public class VerificationMailResolver implements HandlerMethodArgumentResolver {
 
     private static final  String CODE_PARAM = "code";
     private static final  String MAIL_PARAM = "mail";
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-       return parameter.getDeclaringClass().equals(VerificationDTO.class);
+       return parameter.getDeclaringClass().equals(VerificationMailDTO.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter,
+    public Object resolveArgument(@NotNull MethodParameter parameter,
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest req,
                                   WebDataBinderFactory binderFactory) {
@@ -34,6 +35,6 @@ public class VerificationResolver implements HandlerMethodArgumentResolver {
             mail = mailRaw;
         }
 
-        return new VerificationDTO(code, mail);
+        return new VerificationMailDTO(code, mail);
     }
 }

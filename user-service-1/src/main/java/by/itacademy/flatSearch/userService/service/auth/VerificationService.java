@@ -1,40 +1,39 @@
 package by.itacademy.flatSearch.userService.service.auth;
 
-import by.itacademy.flatSearch.userService.core.dto.VerificationDTO;
 import by.itacademy.flatSearch.userService.core.enums.messages.ErrorMessages;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import by.itacademy.flatSearch.userService.core.exception.custom_exceptions.ValidationException;
-import by.itacademy.flatSearch.userService.dao.api.ICRUDUserDao;
 import by.itacademy.flatSearch.userService.dao.api.IMailQueueDao;
 import by.itacademy.flatSearch.userService.dao.entity.User;
-import by.itacademy.flatSearch.userService.dao.entity.VerificationEntity;
+import by.itacademy.flatSearch.userService.dao.entity.VerificationMailEntity;
 import by.itacademy.flatSearch.userService.service.auth.api.IVerificationService;
+import by.itacademy.flatSearch.userService.service.user.api.IUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 public class VerificationService implements IVerificationService {
-    private IMailQueueDao verificationDao;
-    private ICRUDUserDao crudUserDao;
+    private final IMailQueueDao verificationDao;
+    private final IUserService userService;
 
-    public VerificationService(IMailQueueDao verificationDao, ICRUDUserDao crudUserDao) {
+
+    public VerificationService(IMailQueueDao verificationDao, IUserService userService) {
         this.verificationDao = verificationDao;
-        this.crudUserDao = crudUserDao;
+        this.userService = userService;
     }
 
     @Override
     @Transactional
-    public void verify(VerificationDTO verificationDTO) {
-        VerificationEntity storedEntity = verificationDao.findByMailAndCode(verificationDTO.getMail(),
-                verificationDTO.getCode()).orElseThrow(() ->
+    public void verify(VerificationMailEntity verificationMailEntity) {
+        VerificationMailEntity storedEntity = verificationDao.findByMailAndCode(verificationMailEntity.getMail(),
+                verificationMailEntity.getCode()).orElseThrow(() ->
                 new ValidationException(ErrorMessages.INCORRECT_VERIFICATION_CODE.getMessage()));
 
-        User user = crudUserDao.findByMail(storedEntity.getMail())
-                .orElseThrow(() -> new ValidationException(ErrorMessages.USER_NOT_FOUND.getMessage()));
+        User user = userService.get(storedEntity.getMail());
 
         user.setStatus(UserStatus.ACTIVATED);
-        crudUserDao.save(user);
+        userService.save(user);
         verificationDao.delete(storedEntity);     // Delete user im mail Queue table
     }
 }
