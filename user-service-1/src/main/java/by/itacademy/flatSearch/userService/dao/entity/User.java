@@ -3,21 +3,25 @@ package by.itacademy.flatSearch.userService.dao.entity;
 import by.itacademy.flatSearch.userService.core.enums.UserRole;
 import by.itacademy.flatSearch.userService.core.enums.UserStatus;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
-@Table(schema = "client",  name = "client")
+@Table(schema = "users",  name = "users")
 public class User {
     @Id
+    @GeneratedValue
+    @Column(unique = true)
     private UUID uuid;
     @Column(name = "dt_create", nullable = false)
-    private LocalDate dataCreate;
+    private long dataCreate;
     @Column(name = "dt_update", nullable = false)
-    private LocalDate dataUpdate;
-    @Column(nullable = false)
+    private long dataUpdate;
+    @Column(nullable = false, unique = true)
     private String mail;
     @Column(nullable = false)
     private String password;
@@ -34,20 +38,21 @@ public class User {
     public User() {
     }
 
-    public User(UUID uuid, LocalDate dt_create,
-                LocalDate dt_update, String mail,
-                String fio, UserRole role,
-                UserStatus status, String password) {
-
+    public User(UUID uuid, long dataCreate,
+                long dataUpdate, String mail,
+                String password, String fio,
+                UserRole role, UserStatus status) {
         this.uuid = uuid;
-        this.dataCreate = dt_create;
-        this.dataUpdate = dt_update;
+        this.dataCreate = dataCreate;
+        this.dataUpdate = dataUpdate;
         this.mail = mail;
+        this.password = password;
         this.fio = fio;
         this.role = role;
         this.status = status;
-        this.password = password;
     }
+
+
 
     public String getPassword() {
         return password;
@@ -65,19 +70,19 @@ public class User {
         this.uuid = uuid;
     }
 
-    public LocalDate getDataCreate() {
+    public long getDataCreate() {
         return dataCreate;
     }
 
-    public void setDataCreate(LocalDate dataCreate) {
+    public void setDataCreate(long dataCreate) {
         this.dataCreate = dataCreate;
     }
 
-    public LocalDate getDataUpdate() {
+    public long getDataUpdate() {
         return dataUpdate;
     }
 
-    public void setDataUpdate(LocalDate dataUpdate) {
+    public void setDataUpdate(long dataUpdate) {
         this.dataUpdate = dataUpdate;
     }
 
