@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/flatsDB
+    username: postgres
+    password: kitanax
+  profiles:
+    active: local
+  jpa:
+    show-sql: true
+
+
+
+app:
+  jwt:
+    secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+  urls:
+    realt:
+      basic: https://realt.by
+      rent:
+        for-long: https://realt.by/belarus/rent/flat-for-long/
+        for-day: https://realt.by/belarus/rent/flat-for-day/
+      sales: https://realt.by/belarus/sale/flats/
+
+
+server:
+  port: 8083
