@@ -1,8 +1,8 @@
 package by.itacademy.flatSearch.mailService.service.api;
 
 
-import by.itacademy.flatSearch.mailService.core.dto.MailDTO;
+import by.itacademy.exceptions.dto.VerificationMailDTO;
 
 public interface IMailService {
-    void send(MailDTO mailDTO);
+    void send(VerificationMailDTO mailDTO);
 }

@@ -12,7 +12,10 @@
 
     <modules>
         <module>audit-service</module>
-        <module>user-service-1</module>
+        <module>user-service</module>
         <module>mail-service</module>
+        <module>exceptions</module>
+        <module>flat-service</module>
+        <module>parser-service</module>
     </modules>
 </project>
