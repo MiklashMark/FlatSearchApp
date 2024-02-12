@@ -1,19 +1,23 @@
-package by.itacademy.flatSearch.mailService;
+package by.itacademy.flatSearch;
 
-import by.itacademy.flatSearch.mailService.config.security.properties.JWTProperty;
+import by.itacademy.flatSearch.userService.config.security.properties.JWTProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableConfigurationProperties({JWTProperty.class})
-@EnableTransactionManagement
-@EnableScheduling
 @SpringBootApplication
-public class MailServiceApp {
+@EnableFeignClients
+@EnableConfigurationProperties({JWTProperty.class})
+@EnableScheduling
+@EnableTransactionManagement
+public class UserServiceApp {
 	public static void main(String[] args) {
-		SpringApplication.run(MailServiceApp.class, args);
+		SpringApplication.run(UserServiceApp.class, args);
 	}
 }
+
+
