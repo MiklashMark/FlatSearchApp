@@ -1,4 +1,4 @@
-package by.itacademy.flatservice.service.parser;
+package by.itacademy.parserservice.service.parser;
 
 import by.itacademy.exceptions.dto.flat.OfferType;
 import by.itacademy.exceptions.exception.custom_exceptions.InternalServerException;
@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 @Service

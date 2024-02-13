@@ -1,4 +1,4 @@
-package by.itacademy.flatservice.service.parser.api;
+package by.itacademy.parserservice.service.parser.api;
 
 import by.itacademy.flatservice.repository.entity.Flat;
 

@@ -1,4 +1,4 @@
-package by.itacademy.flatservice.service.parser;
+package by.itacademy.parserservice.service.parser;
 
 import by.itacademy.flatservice.repository.api.IPhotoRepository;
 import org.springframework.scheduling.annotation.EnableScheduling;

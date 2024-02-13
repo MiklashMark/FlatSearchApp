@@ -116,6 +116,12 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.16.2</version>
 		</dependency>
+		<dependency>
+			<groupId>by.itacademy</groupId>
+			<artifactId>exceptions</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

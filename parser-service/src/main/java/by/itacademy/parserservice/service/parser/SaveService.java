@@ -1,4 +1,4 @@
-package by.itacademy.flatservice.service.parser;
+package by.itacademy.parserservice.service.parser;
 
 import by.itacademy.flatservice.repository.api.IFlatRepository;
 import by.itacademy.flatservice.repository.entity.Flat;
@@ -8,7 +8,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
