@@ -1,4 +1,4 @@
-package by.itacademy.flatservice.core.util;
+package by.itacademy.parserservice.core.util;
 
 public class NumberUtils {
 

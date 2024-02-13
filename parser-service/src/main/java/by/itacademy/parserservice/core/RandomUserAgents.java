@@ -1,4 +1,4 @@
-package by.itacademy.flatservice.core;
+package by.itacademy.parserservice.core;
 
 import java.util.ArrayList;
 import java.util.List;
