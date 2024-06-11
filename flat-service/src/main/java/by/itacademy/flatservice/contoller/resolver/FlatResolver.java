@@ -35,7 +35,7 @@ public class FlatResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter,
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
-                                  WebDataBinderFactory binderFactory) throws Exception {
+                                  WebDataBinderFactory binderFactory) {
 
         String pageRaw = webRequest.getParameter(PAGE_PARAM);
         int page = (pageRaw != null && !pageRaw.isBlank()) ? Integer.parseInt(pageRaw) : 0;

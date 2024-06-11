@@ -10,7 +10,9 @@ public enum Messages {
     USER_SUCCESSFULLY_ADDED("User successfully added."),
     ACCOUNT_IS_NOT_ACTIVATED("Account is not activated! Please verify."),
     SUCCESSFULLY_UPDATED("Successfully updated"),
-    AUDIT_SUCCESSFULLY_ADDED("Audit successfully added");
+    AUDIT_SUCCESSFULLY_ADDED("Audit successfully added"),
+    BOOKMARK_SUCCESSFULLY_ADDED("Bookmark successfully added"),
+    BOOKMARK_SUCCESSFULLY_DELETED("Bookmark successfully deleted");
 
     private final String message;
 

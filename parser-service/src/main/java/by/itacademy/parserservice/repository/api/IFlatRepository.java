@@ -1,14 +1,10 @@
 package by.itacademy.parserservice.repository.api;
 
-import by.itacademy.flatservice.repository.entity.Flat;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import by.itacademy.parserservice.repository.entity.Flat;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface IFlatRepository extends JpaRepository<Flat, String> {
-    Page<Flat> findAll(Specification<Flat> filter, Pageable pageable);
+import java.util.UUID;
 
+public interface IFlatRepository extends JpaRepository<Flat, UUID> {
+    boolean existsByOriginalUrl(String url);
 }

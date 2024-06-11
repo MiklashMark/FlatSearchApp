@@ -4,18 +4,19 @@ import by.itacademy.exceptions.dto.flat.OfferType;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "flats", name = "flat")
+@Table(schema = "flat", name = "flat")
 public class Flat {
-
-    @Column(name = "original_url")
     @Id
-    private String originalUrl;
+    @GeneratedValue
     private UUID uuid;
+    @Column(name = "original_url")
+    private String originalUrl;
     @Column(name = "dt_create")
     private LocalDateTime createDate;
     @Column(name = "dt_update")
@@ -26,26 +27,35 @@ public class Flat {
     private String description;
     private int floor;
     private int bedrooms;
-    private String price;
-    private float area;
-    @OneToMany(mappedBy = "flat", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Photo> photos;
+    private int price;
+    private int area;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "flat_uuid")
+    private List<Photo> photos;
 
     public Flat() {
     }
 
-    public Flat(UUID uuid, LocalDateTime createDate, LocalDateTime updateDate, OfferType offerType, String description, int floor, int bedrooms, String originalUrl, String price, float area, Set<Photo> photos) {
-        this.uuid = uuid;
+    public Flat(String originalUrl, LocalDateTime createDate, LocalDateTime updateDate, OfferType offerType,
+                String description, int floor, int bedrooms, int price, int area, List<Photo> photos) {
+        this.originalUrl = originalUrl;
         this.createDate = createDate;
         this.updateDate = updateDate;
         this.offerType = offerType;
         this.description = description;
         this.floor = floor;
         this.bedrooms = bedrooms;
-        this.originalUrl = originalUrl;
         this.price = price;
         this.area = area;
         this.photos = photos;
+    }
+
+    public String getOriginalUrl() {
+        return originalUrl;
+    }
+
+    public void setOriginalUrl(String originalUrl) {
+        this.originalUrl = originalUrl;
     }
 
     public UUID getUuid() {
@@ -104,63 +114,41 @@ public class Flat {
         this.bedrooms = bedrooms;
     }
 
-    public String getOriginalUrl() {
-        return originalUrl;
-    }
-
-    public void setOriginalUrl(String originalUrl) {
-        this.originalUrl = originalUrl;
-    }
-
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public float getArea() {
+    public int getArea() {
         return area;
     }
 
-    public void setArea(float area) {
+    public void setArea(int area) {
         this.area = area;
     }
 
-    public Set<Photo> getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(Set<Photo> photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
 
     @Override
     public boolean equals(Object o) {
+        
         if (this == o) return true;
-        if (!(o instanceof Flat that)) return false;
-        return floor == that.floor && bedrooms == that.bedrooms && Float.compare(area, that.area) == 0 && Objects.equals(uuid, that.uuid) && Objects.equals(createDate, that.createDate) && Objects.equals(updateDate, that.updateDate) && offerType == that.offerType && Objects.equals(description, that.description) && Objects.equals(originalUrl, that.originalUrl) && Objects.equals(price, that.price);
+        if (o == null || getClass() != o.getClass()) return false;
+        Flat flat = (Flat) o;
+        return floor == flat.floor && bedrooms == flat.bedrooms && price == flat.price && area == flat.area && Objects.equals(originalUrl, flat.originalUrl) && Objects.equals(uuid, flat.uuid) && Objects.equals(createDate, flat.createDate) && Objects.equals(updateDate, flat.updateDate) && offerType == flat.offerType && Objects.equals(description, flat.description) && Objects.equals(photos, flat.photos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, createDate, updateDate, offerType, description, floor, bedrooms, originalUrl, price, area);
-    }
-
-    @Override
-    public String toString() {
-        return "FlatEntity{" +
-                "uuid=" + uuid +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", offerType=" + offerType +
-                ", description='" + description + '\'' +
-                ", floor=" + floor +
-                ", bedrooms=" + bedrooms +
-                ", originalUrl='" + originalUrl + '\'' +
-                ", price='" + price + '\'' +
-                ", area=" + area +
-                '}';
+        return Objects.hash(originalUrl, uuid, createDate, updateDate, offerType, description, floor, bedrooms, price, area, photos);
     }
 }

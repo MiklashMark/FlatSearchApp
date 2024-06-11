@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum OfferType {
-    RENT("rent-flat-for-long/object/"),
+    RENT("https://realt.by/belarus/rent/flat-for-long/"),
 
-    RENT_FOR_DAY("rent-flat-for-long/object/"),
-    SALE("sale-flats/object/");
+    RENT_FOR_DAY("https://realt.by/belarus/rent/flat-for-day/"),
+    SALE("https://realt.by/belarus/sale/flats/");
 
     private final String value;
     OfferType(String value) {

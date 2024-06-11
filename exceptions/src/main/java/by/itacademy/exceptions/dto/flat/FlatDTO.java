@@ -24,9 +24,9 @@ public class FlatDTO {
 
     private String description;
 
-    private float area;
+    private int area;
 
-    private String price;
+    private int price;
 
     private int bedrooms;
 

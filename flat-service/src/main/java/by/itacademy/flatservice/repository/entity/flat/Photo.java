@@ -1,4 +1,4 @@
-package by.itacademy.parserservice.repository.entity;
+package by.itacademy.flatservice.repository.entity.flat;
 
 import jakarta.persistence.*;
 

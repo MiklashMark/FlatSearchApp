@@ -20,7 +20,7 @@ public class FlatRestController {
     }
 
     @GetMapping
-    public ResponseEntity<FlatPageDTO> get( FlatFilter filter)  {
+    public ResponseEntity<FlatPageDTO> get(FlatFilter filter)  {
         return new ResponseEntity<>(service.getPage(filter), HttpStatus.OK);
     }
 }

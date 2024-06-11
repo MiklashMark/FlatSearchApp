@@ -117,7 +117,13 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.9.21</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>by.itacademy</groupId>
+            <artifactId>exceptions</artifactId>
+            <version>0.0.3-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

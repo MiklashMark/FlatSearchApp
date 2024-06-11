@@ -1,5 +1,6 @@
 package by.itacademy.exceptions.enums.messages;
 
+import by.itacademy.exceptions.enums.ErrorsTypes;
 import lombok.Getter;
 
 @Getter
@@ -23,7 +24,11 @@ public enum ErrorMessages {
     UNKNOWN_ERROR("Unknown error occurred. Please, contact the administrator."),
     UNREGISTERED_ACTION("Unregistered action."),
     REPORT_ALREADY_CREATED("the report has already been created"),
-    RESOURCE_NOT_FOUND("No information about this report.");
+    RESOURCE_NOT_FOUND("No information about this report."),
+    BOOKMARK_ALREADY_ADDED("Bookmark already added"),
+    INCORRECT_DATA("Incorrect data"),
+    NO_SUBSCRIPTIONS_FOUND("No subscriptions found."),
+    SUBSCRIBE_ALREADY_ADDED("Subscribe already added");
     private final String message;
 
     ErrorMessages(String message) {

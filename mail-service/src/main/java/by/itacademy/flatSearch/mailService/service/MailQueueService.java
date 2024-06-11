@@ -59,7 +59,6 @@ public class MailQueueService implements IMailQueueService {
                     + verificationMailEntity.getCode() + "&mail=" + verificationMailEntity.getMail());
 
             mailSender.send(message);
-            System.out.println("1111111111111111111");
             VerificationMailDTO verificationMailDTO = new VerificationMailDTO();
             verificationMailDTO.setMail(verificationMailEntity.getMail());
             verificationMailDTO.setCode(verificationMailEntity.getCode());

@@ -1,19 +1,22 @@
 package by.itacademy.flatservice.core;
 
 import by.itacademy.exceptions.dto.flat.FlatDTO;
-import by.itacademy.exceptions.dto.flat.FlatPageDTO;
-import by.itacademy.flatservice.repository.entity.Flat;
-import by.itacademy.flatservice.repository.entity.Photo;
+import by.itacademy.exceptions.dto.flat.bookmark.BookmarkDTO;
+import by.itacademy.flatservice.repository.entity.Bookmark;
+import by.itacademy.flatservice.repository.entity.flat.Flat;
+import by.itacademy.flatservice.repository.entity.flat.Photo;
+import by.itacademy.flatservice.repository.subscribe.Subscribe;
+import by.itacademy.flatservice.repository.subscribe.SubscribeFilter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.boot.web.server.MimeMappings;
+import org.springframework.data.domain.Page;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -74,4 +77,42 @@ public interface EntityDTOMapper {
                 .map(this::flatToFlatDTO)
                 .collect(Collectors.toList());
     }
+
+    default BookmarkDTO createBookmarkDTO(Page<Bookmark> bookmarkPage, List<FlatDTO> flatDTOS) {
+        BookmarkDTO bookmarkDTO = new BookmarkDTO();
+        bookmarkDTO.setNumber(bookmarkPage.getNumber());
+        bookmarkDTO.setSize(bookmarkPage.getSize());
+        bookmarkDTO.setTotalPages(bookmarkPage.getTotalPages());
+        bookmarkDTO.setTotalElements(bookmarkPage.getTotalElements());
+        bookmarkDTO.setNumberOfElements(bookmarkPage.getNumberOfElements());
+        bookmarkDTO.setFirst(bookmarkPage.isFirst());
+        bookmarkDTO.setLast(bookmarkPage.isLast());
+        bookmarkDTO.setContent(flatDTOS);
+        return bookmarkDTO;
+    }
+
+    SubscribeFilter toSubscribeFilter(SubscribeFilterDTO subscribeFilterDTO);
+
+    FlatFilter toFlatFilter(SubscribeFilter subscribeFilter);
+
+    default SubscribeDTO toSubscribeDTO(Subscribe subscribe) {
+        if (subscribe == null) {
+            return null;
+        }
+        return new SubscribeDTO()
+                .setUuid(subscribe.getUuid())
+                .setUserUuid(subscribe.getUserUuid())
+                .setDtCreate(subscribe.getDtCreate().toEpochSecond(ZoneOffset.UTC) * 1000)
+                .setDtUpdate(subscribe.getDtUpdate().toEpochSecond(ZoneOffset.UTC) * 1000)
+                .setSubscribeFilters(EntityDTOMapper.INSTANCE.toSubscribeFilterDTOList(subscribe.getSubscribeFilters()));
+    }
+
+    SubscribeFilterDTO toSubscribeFilterDTO(SubscribeFilter subscribeFilter);
+
+    default List<SubscribeFilterDTO> toSubscribeFilterDTOList(List<SubscribeFilter> subscribeFilters) {
+        return subscribeFilters.stream()
+                .map(this::toSubscribeFilterDTO)
+                .collect(Collectors.toList());
+    }
+
 }
