@@ -1,19 +1,25 @@
 name: Build
 on:
   push:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [audit-service, audit-db, flat-db, flat-service, parser-service, pgadmin, proxy, sender-db, sender-service, user-db, user-service]
     steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: Dockerfile
-          push: false
-          tags: user/app:latest
+          context: ./${{ matrix.service }}
+          file: ./${{ matrix.service }}/Dockerfile
+          push: true
+          tags: user/${{ matrix.service }}:latest
+
