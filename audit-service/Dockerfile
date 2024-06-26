@@ -1,11 +1,11 @@
-FROM amazoncorretto:21 AS build
+FROM maven:3.8.4-openjdk-11-slim AS build
 WORKDIR /app
-RUN yum install -y maven
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 FROM amazoncorretto:21
-RUN mkdir -p /reports_xls
-COPY --from=build /app/target/*.jar audit-service.jar
-ENTRYPOINT ["java","-jar","/audit-service.jar"]
+WORKDIR /app
+COPY --from=build /app/target/audit-service.jar .
+CMD ["java", "-jar", "audit-service.jar"]
+
