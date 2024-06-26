@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5433/user-service?currentSchema=security
-    password: root
-    username: root
+    url: jdbc:postgresql://user-db:5432/usersDB
+    username: postgres
+    password: kitanax
 
-app:
-  user:
-    storage: JDBC #MEMORY or JDBC
+
+#app:
+#  user:
+#    storage: JDBC #MEMORY or JDBC

@@ -1,11 +1,12 @@
 {
   "Servers": {
     "1": {
-      "Name": "Flats DB",
+      "Name": "Flats",
       "Group": "Server Group 1",
       "Port": 5432,
-      "Username": "root",
-      "Host": "db",
+      "Username": "postgres",
+      "password": "kitanax",
+      "Host": "flat-db",
       "SSLMode": "prefer",
       "MaintenanceDB": "postgres"
     }

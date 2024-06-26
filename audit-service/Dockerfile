@@ -1,8 +1,6 @@
-FROM eclipse-temurin:19-jre-focal
-MAINTAINER ITAcademy
+FROM amazoncorretto:21
+RUN mkdir -p /reports_xls
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} audit-service.jar
 
-ADD ./target/audit-service.jar /app/
-
-CMD ["java", "-Xmx200m", "-jar", "/app/audit-service.jar"]
-
-EXPOSE 8080 8089
+ENTRYPOINT ["java","-jar","/audit-service.jar"]
