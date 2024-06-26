@@ -1,0 +1,17 @@
+name: Check
+on: push
+branches: main
+  jobs:
+    test:
+      runs-on: ubuntu-latest
+      steps:
+        - name: cd into repo
+          uses: actions/checkout@v3
+        - name: set up Java and Maven
+          uses: actions/setup-java@v3
+          with:
+            java-version: '21'
+            distribution: 'amazoncorretto'
+            cache: maven
+        - name: run tests
+          run: mvn test # Запускаем тесты.
