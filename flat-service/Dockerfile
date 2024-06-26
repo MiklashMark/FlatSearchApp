@@ -1,6 +1,11 @@
+FROM amazoncorretto:21 AS build
+WORKDIR /app
+RUN yum install -y maven
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package
+
 FROM amazoncorretto:21
-
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} flat-service.jar
-
+RUN mkdir -p /reports_xls
+COPY --from=build /app/target/*.jar flat-service.jar
 ENTRYPOINT ["java","-jar","/flat-service.jar"]
