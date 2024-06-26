@@ -10,8 +10,8 @@ jobs:
       - name: set up Java and Maven
         uses: actions/setup-java@v3
         with:
-          java-version: '21' #version
-          distribution: 'amazoncorretto'
+          java-version: '17'  # Вместо '21' выберите нужную вам версию Java
+          distribution: 'adopt'
           cache: maven
       - name: run tests
         run: mvn test # Запускаем тесты.
