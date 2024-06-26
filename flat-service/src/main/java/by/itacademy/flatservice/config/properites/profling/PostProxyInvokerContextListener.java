@@ -1,16 +1,13 @@
 package by.itacademy.flatservice.config.properites.profling;
 
-import org.hibernate.event.spi.RefreshContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.awt.print.Pageable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 @Component

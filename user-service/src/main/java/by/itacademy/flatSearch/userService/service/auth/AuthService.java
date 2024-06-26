@@ -26,6 +26,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -50,21 +52,23 @@ public class AuthService implements IAuthService {
 
     @Override
     public String login(UserLoginDTO loginDTO) {
-
         validationService.validateLogin(loginDTO);
-        User user = userService.get(loginDTO);
 
-        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new ValidationException(ErrorMessages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
-        }
+        Optional<User> optionalUser = Optional.ofNullable(userService.get(loginDTO));
+        User user = optionalUser.orElseThrow(() -> new ValidationException(ErrorMessages.INCORRECT_MAIL_OR_PASSWORD.getMessage()));
 
         if (user.getStatus() != UserStatus.ACTIVATED) {
             throw new AccountActivationException(Messages.ACCOUNT_IS_NOT_ACTIVATED.getMessage());
         }
 
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new ValidationException(ErrorMessages.INCORRECT_MAIL_OR_PASSWORD.getMessage());
+        }
+
         UserDTO userDTO = EntityDTOMapper.INSTANCE.userEntityToUserDTO(user);
         return tokenHandler.generateAccessToken(userDTO);
     }
+
 
     @Override
     @Audited(action = Actions.ME, essenceType = EssenceType.USER)

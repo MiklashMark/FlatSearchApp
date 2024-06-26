@@ -1,7 +1,5 @@
 package by.itacademy.flatservice.core;
 
-import by.itacademy.flatservice.repository.subscribe.SubscribeFilter;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

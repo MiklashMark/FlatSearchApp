@@ -1,17 +1,102 @@
-version: '3.5'
+version: '4.4'
 services:
-  db:
-    build: postgresql
-    image: flats_postgresql:1.0.0
+  user-db:
+    build: user-db
+    image: user-db:1.0.8
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kitanax
+    networks:
+      - flats_ntwrk
+
+  sender-db:
+    build: sender-db
+    image: sender-db:1.0.1
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kitanax
+    networks:
+      - flats_ntwrk
+  flat-db:
+    build: flat-db
+    image: flat-db:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kitanax
+    networks:
+      - flats_ntwrk
+  audit-db:
+    build: audit-db
+    image: audit-db:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: kitanax
+    networks:
+      - flats_ntwrk
+
+  sender-service:
+    build: sender-service
+    image: sender-service:1.0.4
+#    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://sender-db/mailDB
+    ports:
+      - "8081:8081"
+    depends_on:
+      - sender-db
+    networks:
+      - flats_ntwrk
+
+  user-service:
+    build: user-service
+    image: user-service:1.0.9
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db/usersDB
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-db
+    networks:
+      - flats_ntwrk
+
+  parser-service:
+    build: parser-service
+    image: parser-service:1.0.0
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://flat-db/Flats
+    ports:
+      - "8082:8082"
+    depends_on:
+      - flat-db
+    networks:
+      - flats_ntwrk
+  flat-service:
+    build: flat-service
+    image: flat-service:1.0.0
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://flat-db/Flats
+    ports:
+      - "8083:8083"
+    depends_on:
+      - flat-db
+    networks:
+      - flats_ntwrk
+  audit-service:
+    build: audit-service
+    image: audit-service:1.0.0
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://audit-db:5432/audit_reportDB
+    ports:
+      - "8084:8084"
     networks:
       - flats_ntwrk
   pgadmin:
     build: pgadmin
-    image: flats_pgadmin:1.0.0
+    image: flats_pgadmin:1.0.1
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -20,33 +105,18 @@ services:
       - "82:80"
     networks:
       - flats_ntwrk
-  swagger-ui:
-    build: swagger-ui
-    image: flats_swagger-ui:1.0.3
-    ports:
-      - "81:8080"
-    networks:
-      - flats_ntwrk
-  user-service:
-    build: user-service
-    image: flats_user-service:1.0.0
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-    networks:
-      - flats_ntwrk
-  audit-service:
-    build: audit-service
-    image: flats_audit-service:1.0.0
-    networks:
-      - flats_ntwrk
-
   proxy:
     build: proxy
-    image: flats_proxy:1.0.1
+    image: flats_proxy:1.0.2
     ports:
       - "80:80"
     networks:
       - flats_ntwrk
+
+
+
+
+
 networks:
-    flats_ntwrk:
-      name: flats_ntwrk
+  flats_ntwrk:
+    driver: bridge  # Драйвер для сети

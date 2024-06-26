@@ -13,7 +13,7 @@
     <modules>
         <module>audit-service</module>
         <module>user-service</module>
-        <module>mail-service</module>
+        <module>sender-service</module>
         <module>exceptions</module>
         <module>flat-service</module>
         <module>parser-service</module>

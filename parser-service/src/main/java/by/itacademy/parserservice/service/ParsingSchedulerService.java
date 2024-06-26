@@ -37,13 +37,14 @@ public class ParsingSchedulerService implements IParsingSchedulerService {
         this.parserQueue = parserQueue;
     }
 
-
     @Override
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedDelay = 86400)
     public void start() {
-        CompletableFuture.runAsync(this::getRentForLongFlats);
-        CompletableFuture.runAsync(this::getSaleFlats);
-        CompletableFuture.runAsync(this::getRentForDayFlats);
+        CompletableFuture<Void> rentForLongFuture = CompletableFuture.runAsync(this::getRentForLongFlats);
+        CompletableFuture<Void> saleFlatsFuture = CompletableFuture.runAsync(this::getSaleFlats);
+        CompletableFuture<Void> rentForDayFlatsFuture = CompletableFuture.runAsync(this::getRentForDayFlats);
+
+        CompletableFuture.allOf(rentForLongFuture, saleFlatsFuture, rentForDayFlatsFuture).join();
     }
 
     @Override
@@ -91,23 +92,26 @@ public class ParsingSchedulerService implements IParsingSchedulerService {
     }
 
     @Override
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedDelay = 1000)
     @Transactional
     public void save() {
         ExecutorService executorService = Executors.newFixedThreadPool(threadsInPool);
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                executorService.submit(() -> {
-                    try {
-                        Flat flat = parserQueue.get();
-                        if (!flatRepository.existsByOriginalUrl(flat.getOriginalUrl())) {
-                            flatRepository.save(flat);
-                            log.info("SAVE" + flat.getOfferType() + "IN DB");
-                        }
-                    } catch (DataAccessException e) {
-                        throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
+                Flat flat = parserQueue.get();
+
+                if (flat == null) {
+                    break;
+                }
+
+                try {
+                    if (!flatRepository.existsByOriginalUrl(flat.getOriginalUrl())) {
+                        flatRepository.save(flat);
+                        log.info("SAVE " + flat.getOfferType() + " IN DB");
                     }
-                });
+                } catch (DataAccessException e) {
+                    throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
+                }
             }
         } catch (Exception e) {
             throw new InternalServerException(ErrorMessages.SERVER_ERROR.getMessage());
@@ -116,7 +120,7 @@ public class ParsingSchedulerService implements IParsingSchedulerService {
         }
     }
 
-    private void  shutdownExecutorsService(ExecutorService executorService) {
+    private void shutdownExecutorsService(ExecutorService executorService) {
         executorService.shutdown();
     }
 }

@@ -106,13 +106,6 @@
         </dependency>
 
 		<dependency>
-			<groupId>by.itacademy</groupId>
-			<artifactId>exception</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>C:/Users/markm/.m2/repository/by/itacademy/exceptions/0.0.3-SNAPSHOT/exceptions-0.0.3-SNAPSHOT.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.9.21</version>
@@ -121,9 +114,15 @@
             <groupId>by.itacademy</groupId>
             <artifactId>exceptions</artifactId>
             <version>0.0.3-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.25.3</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 
 	<build>
 		<plugins>
