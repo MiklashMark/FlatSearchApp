@@ -9,6 +9,10 @@ jobs:
       matrix:
         service: [audit-service, audit-db, flat-db, flat-service, parser-service, pgadmin, proxy, sender-db, sender-service, user-db, user-service]
     steps:
+      - name: Set up Node.js
+          uses: actions/setup-node@v2
+          with:
+            node-version: '16'
       - name: Check out the repo
         uses: actions/checkout@v3
       - name: Set up QEMU
@@ -20,6 +24,6 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           file: ./${{ matrix.service }}/Dockerfile
-          push: true
+          push: false
           tags: user/${{ matrix.service }}:latest
 
