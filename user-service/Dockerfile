@@ -1,4 +1,5 @@
-FROM amazoncorretto:21
+FROM amazoncorretto:11
+ARG JAR_FILE=/home/runner/work/FlatSearchApp/FlatSearchApp/user-service/target/user-service.jar
 WORKDIR /app
-COPY target/user-service.jar user-service.jar
+COPY $JAR_FILE user-service.jar
 CMD ["java", "-jar", "user-service.jar"]
