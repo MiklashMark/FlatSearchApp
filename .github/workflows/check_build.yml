@@ -92,7 +92,7 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.service }}
+          context: ./${{ matrix.service }}/target
           file: ./${{ matrix.service }}/Dockerfile
           push: false
           tags: user/${{ matrix.service }}:latest
