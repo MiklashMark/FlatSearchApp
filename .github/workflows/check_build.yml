@@ -159,7 +159,7 @@ jobs:
       - name: Docker Compose up
         env:
           IMAGE_REF: ${{ steps.meta.outputs.tags }}
-          # Добавьте любые другие еременныеокружения, которые необходимы для вашего Docker Compose
+          # Добавьте любые другие еременные окружения, которые необходимы для вашего Docker Compose
         run: |
           docker-compose --context remote -f docker-compose.yml up -d
 
