@@ -67,7 +67,7 @@ jobs:
           name: ${{ matrix.service }}
           path: ${{ matrix.service }}/target/*.jar
 
-  build_db_modules:
+  build_db:
     runs-on: ubuntu-latest
     needs: test_services
     strategy:
@@ -131,13 +131,41 @@ jobs:
           build-args: |
             JAR_FILE=*.jar
 
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: [ build_services, build_db ]
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#deploy:
-#  runs-on: ubuntu-latest
-#  needs: build_services
-#  steps:
-#    - name: Install doctl
-#      uses: digitalocean/action-doctl@v2
-#      with:
-#        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Install SSH keys and Docker context
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          docker context create remote --docker "host=ssh://${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}"
+
+      - name: Extract metadata (tags, labels) for Docker image
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+
+      - name: Docker Compose up
+        env:
+          IMAGE_REF: ${{ steps.meta.outputs.tags }}
+          # Добавьте любые другие переменные окружения, которые необходимы для вашего Docker Compose
+        run: |
+          docker-compose --context remote -f docker-compose.yml up -d
+
+      - name: Clean up SSH keys
+        run: rm -rf ~/.ssh
