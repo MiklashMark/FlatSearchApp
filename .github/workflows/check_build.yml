@@ -97,4 +97,4 @@ jobs:
           push: false
           tags: user/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE=./${{ matrix.service }}/target/*.jar
+            JAR_FILE=*.jar
