@@ -3,8 +3,25 @@ on:
   push:
 
 jobs:
-  test:
+  install-exceptions:
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'adopt'
+          cache: maven
+
+      - name: Install exceptions module
+        run: cd exceptions && mvn clean install
+
+  test-services:
+    runs-on: ubuntu-latest
+    needs: install-exceptions
     strategy:
       matrix:
         service: [audit-service, flat-service, parser-service, sender-service, user-service]
@@ -20,7 +37,14 @@ jobs:
           cache: maven
 
       - name: Run tests for ${{ matrix.service }}
-        run: cd ${{ matrix.service }} && mvn clean package -DskipTests=false
+        run: |
+          cd ${{ matrix.service }}
+          mvn clean test
+
+      - name: Package service JAR
+        run: |
+          cd ${{ matrix.service }}
+          mvn package -DskipTests
 
       - name: Archive JAR files
         uses: actions/upload-artifact@v3
@@ -30,7 +54,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-services
     strategy:
       matrix:
         service: [audit-service, audit-db, flat-db, flat-service, parser-service, pgadmin, proxy, sender-db, sender-service, user-db, user-service]
