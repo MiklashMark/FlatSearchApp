@@ -1,6 +1,9 @@
 name: CI/CD Pipeline
+
 on:
   push:
+    branches:
+      - main
 
 jobs:
   install-exceptions:
@@ -35,6 +38,12 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
           cache: maven
+
+      - name: Ensure local repository is available
+        run: mkdir -p ~/.m2/repository
+
+      - name: Copy local repository
+        run: cp -r /home/runner/.m2/repository ~/.m2/
 
       - name: Run tests for ${{ matrix.service }}
         run: |
@@ -79,5 +88,5 @@ jobs:
         with:
           context: ./${{ matrix.service }}
           file: ./${{ matrix.service }}/Dockerfile
-          push: false
+          push: true
           tags: user/${{ matrix.service }}:latest
