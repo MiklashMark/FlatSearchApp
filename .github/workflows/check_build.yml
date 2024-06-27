@@ -51,7 +51,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-      - name: Run tests for ${{ matrix.service }}
+      - name: Run tests for "${{ matrix.service }}"
         run: |
           cd ${{ matrix.service }}
           mvn clean test
@@ -64,7 +64,7 @@ jobs:
       - name: Archive JAR files
         uses: actions/upload-artifact@v3
         with:
-          name: jar-files-${{ matrix.service }}
+          name: ${{ matrix.service }}
           path: ${{ matrix.service }}/target/*.jar
 
   build:
@@ -80,7 +80,7 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: jar-files-${{ matrix.service }}
+          name: ${{ matrix.service }}
           path: ${{ matrix.service }}/target/*.jar
 
       - name: Set up QEMU
