@@ -72,7 +72,7 @@ jobs:
     needs: test-services
     strategy:
       matrix:
-        service: [audit-service, audit-db, flat-db, flat-service, parser-service, pgadmin, proxy, sender-db, sender-service, user-db, user-service]
+        service: [audit-service, flat-service, parser-service, sender-service, user-service]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
