@@ -83,24 +83,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Log in to GitHub Container Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
           context: ./${{ matrix.db_s }}
           file: ./${{ matrix.db_s }}/Dockerfile
-          push: false
-          tags: user/${{ matrix.db_s }}:latest
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.db_s }}:latest
 
-      - name: Save Docker image to tar
-        run: |
-          docker save user/${{ matrix.db_s }}:latest -o ${{ matrix.db_s }}.tar
-        continue-on-error: true
 
-      - name: Archive Docker image
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.db_s }}-image
-          path: ${{ matrix.db_s }}.tar
 
   build_services:
     runs-on: ubuntu-latest
@@ -124,26 +118,20 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Log in to GitHub Container Registry
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
           context: ./${{ matrix.service }}/target
           file: ./${{ matrix.service }}/Dockerfile
           push: false
-          tags: user/${{ matrix.service }}:latest
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.db_s }}:latest
           build-args: |
             JAR_FILE=*.jar
 
-      - name: Save Docker image to tar
-        run: |
-          docker save user/${{ matrix.service }}:latest -o ${{ matrix.service }}.tar
-        continue-on-error: true
 
-      - name: Archive Docker image
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.service }}-image
-          path: ${{ matrix.service }}.tar
 
   deploy:
     runs-on: ubuntu-latest
