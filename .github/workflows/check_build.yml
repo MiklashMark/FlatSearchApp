@@ -2,6 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
+
 jobs:
   install-exceptions:
     runs-on: ubuntu-latest
@@ -17,7 +18,13 @@ jobs:
           cache: maven
 
       - name: Install exceptions module
-        run: cd exceptions && mvn clean install
+        run: mvn -f exceptions/pom.xml clean install
+
+      - name: Cache Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
   test-services:
     runs-on: ubuntu-latest
@@ -29,14 +36,20 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Restore Maven cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Set up Java and Maven
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'adopt'
           cache: maven
-      - name: Copy local Maven repository
-        run: cp -r /home/runner/.m2/repository $HOME/.m2/repository
 
       - name: Run tests for ${{ matrix.service }}
         run: |
