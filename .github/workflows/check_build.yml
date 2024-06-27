@@ -35,6 +35,8 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
           cache: maven
+      - name: Copy local Maven repository
+        run: cp -r /home/runner/.m2/repository $HOME/.m2/repository
 
       - name: Run tests for ${{ matrix.service }}
         run: |
