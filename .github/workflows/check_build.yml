@@ -92,7 +92,9 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.service }}/target
+          context: ./${{ matrix.service }}/containers
           file: ./${{ matrix.service }}/Dockerfile
           push: false
           tags: user/${{ matrix.service }}:latest
+          build-args: |
+            JAR_FILE=${{ matrix.service }}/target/*.jar

@@ -1,5 +1,5 @@
 FROM amazoncorretto:11
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE
 WORKDIR /app
-COPY $JAR_FILE audit-service.jar
+COPY ${JAR_FILE} audit-service.jar
 CMD ["java", "-jar", "audit-service.jar"]
