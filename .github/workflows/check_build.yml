@@ -143,9 +143,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug known_hosts
-        run: cat ~/.ssh/known_hosts
-
       - name: Install SSH keys and Docker context
         run: |
           mkdir -p ~/.ssh
