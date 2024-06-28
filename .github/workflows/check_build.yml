@@ -183,6 +183,5 @@ jobs:
         run: |
           docker-compose --context remote -f docker-compose.yml up -d
 
-
       - name: Clean up SSH keys
         run: rm -rf ~/.ssh
