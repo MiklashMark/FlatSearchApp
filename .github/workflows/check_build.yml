@@ -135,6 +135,10 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [ build_services, build_db ]
 
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
