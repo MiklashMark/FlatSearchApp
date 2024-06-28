@@ -166,7 +166,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Log in to the Container registry
-        run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login env.REGISTRY -u markmiklash@gmail.com --password-stdin
+        run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ${{env.REGISTRY}} -u markmiklash@gmail.com --password-stdin
 
 
       - name: Docker Compose up
