@@ -110,7 +110,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.service }}
-          path: ./${{ matrix.service }}/target/
+          path: ./${{ matrix.service }}/target/*.jar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -124,6 +124,9 @@ jobs:
       - name: Create Docker image dir
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
+      - name: Copy JAR files for Docker build
+        run: cp ./${{ matrix.service }}/target/*.jar ./${{ matrix.service }}/docker_image/
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
@@ -132,7 +135,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE=./${{ matrix.service }}/target/*.jar
+            JAR_FILE=*.jar
 
   deploy:
     runs-on: ubuntu-22.04
