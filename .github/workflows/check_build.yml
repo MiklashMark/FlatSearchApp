@@ -13,8 +13,8 @@ jobs:
       - name: Set up Java and Maven
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
-          distribution: 'amazoncorretto'
+          java-version: '11'
+          distribution: 'adopt'
           cache: maven
 
       - name: Install exceptions module

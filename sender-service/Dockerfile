@@ -1,4 +1,4 @@
-FROM amazoncorretto:21
+FROM adoptopenjdk:11-jdk-hotspot
 ARG JAR_FILE
 WORKDIR /app
 COPY ${JAR_FILE} sender-service.jar
