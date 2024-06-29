@@ -143,17 +143,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-          # Проверка значения секрета (для отладки)
           echo "KNOWN_HOSTS: $(echo "${{ secrets.KNOWN_HOSTS }}" | head -c 20)"
-
-          # Добавление ключа в known_hosts
           ssh-keyscan -H "${{ secrets.KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
-
-          # Проверка содержимого known_hosts
-          echo "Content of known_hosts:"
-          cat ~/.ssh/known_hosts
-
           docker context create remote --docker "host=ssh://${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}"
 
       - name: Debug known_hosts
