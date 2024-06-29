@@ -1,4 +1,4 @@
-FROM adoptopenjdk:17-jdk-hotspot
+FROM  openjdk:17-oracle
 ARG JAR_FILE
 WORKDIR /app
 COPY ${JAR_FILE} sender-service.jar
