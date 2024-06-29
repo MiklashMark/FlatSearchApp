@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jdk-hotspot
+FROM adoptopenjdk:17-jdk-hotspot
 ARG JAR_FILE
 WORKDIR /app
 COPY ${JAR_FILE} audit-service.jar
