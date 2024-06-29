@@ -135,7 +135,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE= ${{ matrix.service }}.jar
+            JAR_FILE=${{ matrix.service }}.jar
 
   deploy:
     runs-on: ubuntu-22.04
