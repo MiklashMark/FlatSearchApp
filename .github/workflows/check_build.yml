@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.service }}
-          path: ~/${{ matrix.service }}/target/*.jar
+          path: ${{ matrix.service }}/target/*.jar
 
   build_db:
     runs-on: ubuntu-latest
@@ -91,8 +91,8 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
-          context: ~/${{ matrix.db_s }}
-          file: ~/${{ matrix.db_s }}/Dockerfile
+          context: ${{ matrix.db_s }}
+          file: ${{ matrix.db_s }}/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.db_s }}:latest
 
@@ -110,7 +110,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.service }}
-          path: ~/${{ matrix.service }}/target/*.jar
+          path: ${{ matrix.service }}/target/*.jar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -122,17 +122,17 @@ jobs:
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Create Docker image dir
-        run: mkdir -p ~/${{ matrix.service }}/docker_image
+        run: mkdir -p ${{ matrix.service }}/docker_image
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
-          context: ~/${{ matrix.service }}/docker_image
-          file: ~/${{ matrix.service }}/Dockerfile
+          context: ${{ matrix.service }}/docker_image
+          file: ${{ matrix.service }}/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE=~/${{ matrix.service }}/target/*.jar
+            JAR_FILE=${{ matrix.service }}/target/*.jar
 
   deploy:
     runs-on: ubuntu-22.04
