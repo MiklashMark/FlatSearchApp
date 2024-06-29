@@ -1,4 +1,4 @@
-FROM amazoncorretto:11
+FROM amazoncorretto:21
 ARG JAR_FILE
 WORKDIR /app
 COPY ${JAR_FILE} user-service.jar
