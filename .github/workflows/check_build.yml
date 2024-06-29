@@ -125,7 +125,7 @@ jobs:
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
       - name: Copy JAR files for Docker build
-        run: cp -r /home/runner/work/flat_search_app/flat_search_app/flat-service/target/*.jar ./${{ matrix.service }}/docker_image/
+        run: cp -r /home/runner/work/flat_search_app/flat_search_app/flat-service/target/${{ matrix.service }}.jar ./${{ matrix.service }}/docker_image/
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
