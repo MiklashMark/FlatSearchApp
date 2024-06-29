@@ -16,7 +16,7 @@ jobs:
       - name: Set up Java and Maven
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'adopt'
           cache: maven
 
@@ -49,7 +49,7 @@ jobs:
       - name: Set up Java and Maven
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'adopt'
           cache: maven
 
@@ -119,18 +119,15 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      -name: Create Docker image dir
-        run: mkdir - ./${{ matrix.service }}/docker_image
-
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.service }}/docker_image
+          context: ./${{ matrix.service }}/target
           file: ./${{ matrix.service }}/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE= ${{ matrix.service }}/target/*.jar
+            JAR_FILE=*.jar
 
   deploy:
     runs-on: ubuntu-22.04
