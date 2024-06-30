@@ -1,5 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://sender-db:5432/mailDB
-    username: postgres
-    password: kitanax

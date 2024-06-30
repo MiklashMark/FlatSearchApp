@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://audit-db:5432/audit_reportDB
-    username: postgres
-    password: kitanax
-
-app:
-  reports:
-    dir: /reports
