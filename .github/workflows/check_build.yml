@@ -78,8 +78,8 @@ jobs:
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.find_jar.outputs.FILE_PATH }}
-          path: ${{ steps.get_jar_name.outputs.JAR_NAME }}
+          name: ${{ matrix.service }}-jar
+          path: ${{ steps.find_jar.outputs.FILE_PATH }}
 
       - name: Archive environment file
         uses: actions/upload-artifact@v3
