@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.2</version>
+		<version>3.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>by.itacademy</groupId>
@@ -13,9 +13,13 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>flat-service</name>
 	<description>flatSearch App Spring Boot</description>
+
 	<packaging>jar</packaging>
+
 	<properties>
 		<java.version>17</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
