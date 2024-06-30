@@ -65,11 +65,11 @@ jobs:
 
       - name: Find JAR file
         id: find_jar
-        run: echo "FILE_PATH=$(find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1)" >> $GITHUB_ENV
+        run: echo "{FILE_PATH}={find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1}" >> "GITHUB_ENV"
 
       - name: Get JAR file name
         id: get_jar_name
-        run: echo "JAR_NAME=$(basename ${{ env.FILE_PATH }})" >> $GITHUB_ENV
+        run: echo "{JAR_NAME}={basename ${{ env.FILE_PATH }}}" >> "GITHUB_ENV"
 
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
@@ -117,7 +117,7 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.service }}-${{ env.JAR_NAME }}
+          name: ${{ env.JAR_NAME }}
           path: ./${{ matrix.service }}/target
 
       - name: Set up QEMU
