@@ -46,6 +46,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
       - name: Set up Java and Maven
         uses: actions/setup-java@v3
         with:
@@ -53,29 +54,27 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-      - name: Run tests for "${{ matrix.service }}"
-        run: |
-          cd ${{ matrix.service }}
-          mvn clean test
-
       - name: Package service JAR
         run: |
           cd ${{ matrix.service }}
-          mvn package -DskipTests
+          mvn clean package
 
       - name: Find JAR file
         id: find_jar
-        run: echo "{JAR_PATH}={find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1}" >> "GITHUB_ENV"
+        run: |
+          echo "FILE_PATH=$(find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1)" >> "$GITHUB_OUTPUT"
 
       - name: Get JAR file name
         id: get_jar_name
-        run: echo "{JAR_NAME}={basename "$JAR_PATH" >> "GITHUB_ENV"
+        run: |
+          JAR_NAME=$(basename "${{ steps.find_jar.outputs.FILE_PATH }}")
+          echo "JAR_NAME=${JAR_NAME}" >> "$GITHUB_OUTPUT"
 
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
-          name: "$JAR_NAME"
-          path: "$JAR_PATH"
+          name: ${{ matrix.service }}-${{ steps.get_jar_name.outputs.JAR_NAME }}
+          path: ${{ steps.find_jar.outputs.FILE_PATH }}
 
   build_db:
     runs-on: ubuntu-latest
@@ -117,8 +116,8 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: "$JAR_NAME"
-          path: "$JAR_PATH"
+          name: ${{ matrix.service }}-${{ steps.get_jar_name.outputs.JAR_NAME }}
+          path: ./${{ matrix.service }}/target
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -129,11 +128,8 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Create Docker image dir
-        run: mkdir -p ./${{ matrix.service }}/docker_image
-
       - name: Copy JAR file to Docker image dir
-        run: cp ./${{ matrix.service }}/target/"$JAR_NAME" ./${{ matrix.service }}/docker_image/"$JAR_NAME"
+        run: cp "${{ matrix.service }}/target/${{ steps.get_jar_name.outputs.JAR_NAME }}" ./${{ matrix.service }}/docker_image/
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -141,7 +137,7 @@ jobs:
           context: ./${{ matrix.service }}/docker_image
           file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/"$JAR_NAME"
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
             JAR_FILE="$JAR_NAME"
 
