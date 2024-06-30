@@ -65,17 +65,17 @@ jobs:
 
       - name: Find JAR file
         id: find_jar
-        run: echo "{FILE_PATH}={find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1}" >> "GITHUB_ENV"
+        run: echo "{JAR_PATH}={find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1}" >> "GITHUB_ENV"
 
       - name: Get JAR file name
         id: get_jar_name
-        run: echo "{JAR_NAME}={basename ${{ env.FILE_PATH }}}" >> "GITHUB_ENV"
+        run: echo "{JAR_NAME}={basename "$JAR_PATH" >> "GITHUB_ENV"
 
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.JAR_NAME }}
-          path: ${{ env.FILE_PATH }}
+          name: "$JAR_NAME"
+          path: "$JAR_PATH"
 
   build_db:
     runs-on: ubuntu-latest
@@ -117,8 +117,8 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: "$env.JAR_NAME"
-          path: ./${{ matrix.service }}/target
+          name: "$JAR_NAME"
+          path: "$JAR_PATH"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -133,7 +133,7 @@ jobs:
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
       - name: Copy JAR file to Docker image dir
-        run: cp ./${{ matrix.service }}/target/"$env.JAR_NAME" ./${{ matrix.service }}/docker_image/"$env.JAR_NAME"
+        run: cp ./${{ matrix.service }}/target/"$JAR_NAME" ./${{ matrix.service }}/docker_image/"$JAR_NAME"
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -141,9 +141,9 @@ jobs:
           context: ./${{ matrix.service }}/docker_image
           file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/"$env.JAR_NAME"
+          tags: ghcr.io/${{ github.repository_owner }}/"$JAR_NAME"
           build-args: |
-            JAR_FILE="$env.JAR_NAME"
+            JAR_FILE="$JAR_NAME"
 
 
   deploy:
