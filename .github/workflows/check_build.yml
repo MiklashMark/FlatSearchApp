@@ -151,6 +151,9 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Create Docker image dir if not exists
+        run: mkdir -p ./${{ matrix.service }}/docker_image/
+
       - name: Copy JAR file to Docker image dir
         run: cp "${{ env.FILE_PATH }}" ./${{ matrix.service }}/docker_image/
 
