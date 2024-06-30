@@ -70,15 +70,12 @@ jobs:
       - name: Get JAR file name
         id: get_jar_name
         run: echo "JAR_NAME=$(basename ${{ env.FILE_PATH }})" >> $GITHUB_ENV
-        outputs:
-          jar_name: ${{ env.JAR_NAME }}
-          file_path: ${{ env.FILE_PATH }}
 
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.service }}-${{ steps.get_jar_name.outputs.jar_name }}
-          path: ${{ steps.get_jar_name.outputs.file_path }}
+          name: ${{ env.JAR_NAME }}
+          path: ${{ env.FILE_PATH }}
 
   build_db:
     runs-on: ubuntu-latest
@@ -120,8 +117,8 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.service }}-${{ steps.get_jar_name.outputs.jar_name }}
-          path: ./${{ matrix.service }}/target/
+          name: ${{ env.JAR_NAME }}
+          path: ${{ env.FILE_PATH }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -144,9 +141,10 @@ jobs:
           context: ./${{ matrix.service }}/docker_image
           file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/$steps.get_jar_name.outputs.jar_name
+          tags: ghcr.io/${{ github.repository_owner }}/${{ env.JAR_NAME }}
           build-args: |
-            JAR_FILE=steps.get_jar_name.outputs.jar_name
+            JAR_FILE=${{ env.JAR_NAME }}
+
 
   deploy:
     runs-on: ubuntu-22.04
