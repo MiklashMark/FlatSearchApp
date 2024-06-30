@@ -110,7 +110,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ matrix.service }}
-          path: ./${{ matrix.service }}/target/*.jar
+          path: ./${{ matrix.service }}/target/${{ matrix.service }}.jar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
