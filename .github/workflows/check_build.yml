@@ -118,7 +118,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.JAR_NAME }}
-          path: ${{ env.FILE_PATH }}
+          path: ./${{ matrix.service }}/target
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -133,7 +133,7 @@ jobs:
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
       - name: Copy JAR file to Docker image dir
-        run: cp "${{ env.FILE_PATH }}" ./${{ matrix.service }}/docker_image/${{ env.JAR_NAME }}
+        run: cp ./${{ matrix.service }}/target/${{ env.JAR_NAME }} ./${{ matrix.service }}/docker_image/${{ env.JAR_NAME }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
