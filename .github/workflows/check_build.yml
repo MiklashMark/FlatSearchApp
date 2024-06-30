@@ -61,12 +61,15 @@ jobs:
         run: |
           cd ${{ matrix.service }}
           mvn package -DskipTests
-      - name: Archive JAR files
-        uses: actions/upload-artifact@v4
+      - name: Find JAR file
+        id: find_jar
+        run: echo "FILE_PATH=$(find ./${{ matrix.service }}/target/ -name '${{ matrix.service }}-*.jar' | head -n 1)" >> $GITHUB_ENV
+
+      - name: Archive JAR file
+        uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.service }}-*
-          pattern: ${{ matrix.service }}-*.jar.original
-          path: ./${{ matrix.service }}/target/${{ matrix.service }}-*.jar
+          name: ${{ matrix.service }}
+          path: ${{ env.FILE_PATH }}
 
 
   build_db:
@@ -111,7 +114,7 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.service}}-*
+          name: ${{ matrix.service}}
           path: ./${{ matrix.service }}/target/${{ matrix.service }}-*.jar
 
       - name: Set up QEMU
