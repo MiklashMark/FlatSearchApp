@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: ${{USER_DB_URL}}
+    username: ${{DB_USR}}
+    password: ${{DB_PSW}}
+
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+
+app:
+  jwt:
+    secret: ${{JWT_SECRET}}
+    issuer: ${{repository.owner}}
+
+audit:
+  service:
+    url: http://audit-service:8084/api/v1/audit
+mail:
+  service:
+    url: http://sender-service:8081/api/v1/mail

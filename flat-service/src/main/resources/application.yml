@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: prod
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+
+app:
+  urls:
+    realt:
+      basic: https://realt.by
+      rent:
+        for-long: https://realt.by/belarus/rent/flat-for-long/
+        for-day: https://realt.by/belarus/rent/flat-for-day/
+      sales: https://realt.by/belarus/sale/flats/

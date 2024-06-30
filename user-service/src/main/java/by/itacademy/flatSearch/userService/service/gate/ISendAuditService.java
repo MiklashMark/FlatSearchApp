@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "audit-service", url = "http://localhost:8082/api/v1/audit")
+@FeignClient(name = "audit-service",url = "${audit.service.url}")
 public interface ISendAuditService {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     void send(@RequestHeader String Authorization, @RequestBody AuditDTO auditDTO);
