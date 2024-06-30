@@ -117,7 +117,7 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ env.JAR_NAME }}
+          name: "$env.JAR_NAME"
           path: ./${{ matrix.service }}/target
 
       - name: Set up QEMU
@@ -133,7 +133,7 @@ jobs:
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
       - name: Copy JAR file to Docker image dir
-        run: cp ./${{ matrix.service }}/target/${{ env.JAR_NAME }} ./${{ matrix.service }}/docker_image/${{ env.JAR_NAME }}
+        run: cp ./${{ matrix.service }}/target/"$env.JAR_NAME" ./${{ matrix.service }}/docker_image/"$env.JAR_NAME"
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -141,9 +141,9 @@ jobs:
           context: ./${{ matrix.service }}/docker_image
           file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/${{ env.JAR_NAME }}
+          tags: ghcr.io/${{ github.repository_owner }}/"$env.JAR_NAME"
           build-args: |
-            JAR_FILE=${{ env.JAR_NAME }}
+            JAR_FILE="$env.JAR_NAME"
 
 
   deploy:
