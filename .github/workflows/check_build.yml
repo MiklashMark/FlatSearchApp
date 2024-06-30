@@ -68,7 +68,6 @@ jobs:
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.service }}
           path: ${{ env.FILE_PATH }}
 
 
@@ -114,7 +113,6 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.service}}
           path: ./${{ matrix.service }}/target/${{ matrix.service }}-*.jar
 
       - name: Set up QEMU
@@ -130,7 +128,7 @@ jobs:
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
       - name: Copy JAR files for Docker build
-        run: cp -r home/runner/work/flat_search_app/flat_search_app/flat-service/target/${{ matrix.service }}.jar ./${{ matrix.service }}/docker_image/
+        run: cp -r home/runner/work/flat_search_app/flat_search_app/${{ matrix.service }}/target/${{ matrix.service }}-*.jar ./${{ matrix.service }}/docker_image/
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
