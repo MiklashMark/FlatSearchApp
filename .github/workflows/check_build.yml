@@ -144,7 +144,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE=${{JAR_NAME}}
+            JAR_FILE=${{ JAR_NAME }}
 
 
   deploy:
