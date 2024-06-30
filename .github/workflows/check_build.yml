@@ -64,8 +64,9 @@ jobs:
       - name: Archive JAR files
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.service }}
-          path: ./${{ matrix.service }}/target/${{ matrix.service }}.jar
+          pattern: ${{ matrix.service }}-*.jar.original
+          path: ./${{ matrix.service }}/target/${{ matrix.service }}-*.jar
+
 
   build_db:
     runs-on: ubuntu-latest
