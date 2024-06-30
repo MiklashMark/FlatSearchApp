@@ -133,7 +133,7 @@ jobs:
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
       - name: Copy JAR file to Docker image dir
-        run: cp ${{ env.FILE_PATH }} ./${{ matrix.service }}/docker_image/
+        run: cp ${{ env.FILE_PATH }} ./${{ matrix.service }}/docker_image/${{ env.JAR_NAME }}
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
