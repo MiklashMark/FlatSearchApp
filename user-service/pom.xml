@@ -138,29 +138,15 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>repackage</id>
 						<goals>
-							<goal>build-info</goal>
+							<goal>repackage</goal>
 						</goals>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<finalName>${project.artifactId}-${project.version}</finalName>
-					<classifier>exec</classifier>
-					<outputDirectory>${project.build.directory}</outputDirectory>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>by.itacademy.flatSearch.UserServiceApp</mainClass> <!-- Замените на ваше имя главного класса -->
-						</manifest>
-					</archive>
-				</configuration>
 			</plugin>
 		</plugins>
 		<finalName>${project.artifactId}-${project.version}</finalName>
