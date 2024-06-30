@@ -62,8 +62,9 @@ jobs:
           cd ${{ matrix.service }}
           mvn package -DskipTests
       - name: Archive JAR files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: ${{ matrix.service }}-*
           pattern: ${{ matrix.service }}-*.jar.original
           path: ./${{ matrix.service }}/target/${{ matrix.service }}-*.jar
 
@@ -110,8 +111,8 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.service }}
-          path: /home/runner/work/flat_search_app/flat_search_app/${{ matrix.service }}/target/${{ matrix.service }}.jar
+          name: ${{ matrix.service}}-*
+          path: ./${{ matrix.service }}/target/${{ matrix.service }}-*.jar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -136,7 +137,7 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
           build-args: |
-            JAR_FILE=${{ matrix.service }}.jar
+            JAR_FILE=${{ matrix.service }}-*.jar
 
   deploy:
     runs-on: ubuntu-22.04
