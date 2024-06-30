@@ -57,6 +57,7 @@ jobs:
         run: |
           cd ${{ matrix.service }}
           mvn clean test
+
       - name: Package service JAR
         run: |
           cd ${{ matrix.service }}
@@ -69,13 +70,15 @@ jobs:
       - name: Get JAR file name
         id: get_jar_name
         run: echo "JAR_NAME=$(basename ${{ env.FILE_PATH }})" >> $GITHUB_ENV
+        outputs:
+          jar_name: ${{ env.JAR_NAME }}
+          file_path: ${{ env.FILE_PATH }}
 
       - name: Archive JAR file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.service }}-${{ env.JAR_NAME }}
-          path: ${{ env.FILE_PATH }}
-
+          name: ${{ matrix.service }}-${{ steps.get_jar_name.outputs.jar_name }}
+          path: ${{ steps.get_jar_name.outputs.file_path }}
 
   build_db:
     runs-on: ubuntu-latest
@@ -95,8 +98,6 @@ jobs:
 
       - name: Log in to GitHub Container Registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -119,8 +120,8 @@ jobs:
       - name: Download JAR files
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.service }}-${{ env.JAR_NAME }}
-          path: ${{ env.FILE_PATH }}
+          name: ${{ matrix.service }}-${{ steps.get_jar_name.outputs.jar_name }}
+          path: ./${{ matrix.service }}/target/
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -134,8 +135,8 @@ jobs:
       - name: Create Docker image dir
         run: mkdir -p ./${{ matrix.service }}/docker_image
 
-      - name: Copy JAR files for Docker build
-        run: cp -r home/runner/work/flat_search_app/flat_search_app/${{ matrix.service }}/target/${{ matrix.service }}-*.jar ./${{ matrix.service }}/docker_image/
+      - name: Copy JAR file to Docker image dir
+        run: cp ./${{ matrix.service }}/target/${{ steps.get_jar_name.outputs.jar_name }} ./${{ matrix.service }}/docker_image/
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
@@ -143,9 +144,9 @@ jobs:
           context: ./${{ matrix.service }}/docker_image
           file: ./${{ matrix.service }}/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:latest
+          tags: ghcr.io/${{ github.repository_owner }}/$steps.get_jar_name.outputs.jar_name
           build-args: |
-            JAR_FILE=${{ matrix.service }}-${{ env.JAR_NAME }}.jar
+            JAR_FILE=steps.get_jar_name.outputs.jar_name
 
   deploy:
     runs-on: ubuntu-22.04
