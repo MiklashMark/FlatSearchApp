@@ -157,6 +157,59 @@ jobs:
       - name: Copy JAR file to Docker image dir
         run: cp "${{ env.FILE_PATH }}" ./${{ matrix.service }}/docker_image/
 
+      - name: Create application-prod.yml from template for audit-service
+        if: matrix.service == 'audit-service'
+        run: |
+          export AUDIT_DB_URL=${{ secrets.AUDIT_DB_URL }}
+          export DB_USR=${{ secrets.DB_USR }}
+          export DB_PSW=${{ secrets.DB_PSW }}
+          export JWT_SECRET=${{ secrets.JWT_SECRET }}
+          envsubst < ./${{ matrix.service }}/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
+
+          - name: Create application-prod.yml from template for flat-service
+            if: matrix.service == 'flat-service'
+            run: |
+              export FLAT_DB_URL=${{ secrets.FLAT_DB_URL }}
+              export DB_USR=${{ secrets.DB_USR }}
+              export DB_PSW=${{ secrets.DB_PSW }}
+              export JWT_SECRET=${{ secrets.JWT_SECRET }}
+              export REPOSITORY_OWNER=${{ github.repository_owner }}
+              envsubst < ./${{ matrix.service }}/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
+
+          - name: Create application-prod.yml from template for parser-service
+            if: matrix.service == 'parser-service'
+            run: |
+              export FLAT_DB_URL=${{ secrets.FLAT_DB_URL }}
+              export DB_USR=${{ secrets.DB_USR }}
+              export DB_PSW=${{ secrets.DB_PSW }}
+              export JWT_SECRET=${{ secrets.JWT_SECRET }}
+              export REPOSITORY_OWNER=${{ github.repository_owner }}
+              envsubst < ./${{ matrix.service }}/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
+
+          - name: Create application-prod.yml from template for sender-service
+            if: matrix.service == 'sender-service'
+            run: |
+              export SENDER_DB_URL=${{ secrets.SENDER_DB_URL }}
+              export DB_USR=${{ secrets.DB_USR }}
+              export DB_PSW=${{ secrets.DB_PSW }}
+              export SENDER_SMPT_HOST=${{ secrets.SENDER_SMPT_HOST }}
+              export SENDER_SMPT_PORT=${{ secrets.SENDER_SMPT_PORT }}
+              export SENDER_SMPT_USERNAME=${{ secrets.SENDER_SMPT_USERNAME }}
+              export SENDER_SMPT_PSW=${{ secrets.SENDER_SMPT_PSW }}
+              export JWT_SECRET=${{ secrets.JWT_SECRET }}
+              export REPOSITORY_OWNER=${{ github.repository_owner }}
+              envsubst < ./${{ matrix.service }}/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
+
+          - name: Create application-prod.yml from template for user-service
+            if: matrix.service == 'user-service'
+            run: |
+              export USER_DB_URL=${{ secrets.USER_DB_URL }}
+              export DB_USR=${{ secrets.DB_USR }}
+              export DB_PSW=${{ secrets.DB_PSW }}
+              export JWT_SECRET=${{ secrets.JWT_SECRET }}
+              export REPOSITORY_OWNER=${{ github.repository_owner }}
+              envsubst < ./${{ matrix.service }}/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
