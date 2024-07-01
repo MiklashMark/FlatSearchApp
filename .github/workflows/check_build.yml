@@ -160,35 +160,39 @@ jobs:
       - name: Create application-prod.yml from template for audit-service
         if: matrix.service == 'audit-service'
         run: |
+          mkdir -p ./${{ matrix.service }}/docker_image
           export AUDIT_DB_URL=${{ secrets.AUDIT_DB_URL }}
           export DB_USR=${{ secrets.DB_USR }}
           export DB_PSW=${{ secrets.DB_PSW }}
           export JWT_SECRET=${{ secrets.JWT_SECRET }}
-          envsubst < ./${{ matrix.service }}/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
+          envsubst < ./${{ matrix.service }}/src/main/resources/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
 
           - name: Create application-prod.yml from template for flat-service
             if: matrix.service == 'flat-service'
             run: |
+              mkdir -p ./${{ matrix.service }}/docker_image
               export FLAT_DB_URL=${{ secrets.FLAT_DB_URL }}
               export DB_USR=${{ secrets.DB_USR }}
               export DB_PSW=${{ secrets.DB_PSW }}
               export JWT_SECRET=${{ secrets.JWT_SECRET }}
               export REPOSITORY_OWNER=${{ github.repository_owner }}
-              envsubst < ./${{ matrix.service }}/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
+              envsubst < ./${{ matrix.service }}/src/main/resources/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
 
           - name: Create application-prod.yml from template for parser-service
             if: matrix.service == 'parser-service'
             run: |
+              mkdir -p ./${{ matrix.service }}/docker_image
               export FLAT_DB_URL=${{ secrets.FLAT_DB_URL }}
               export DB_USR=${{ secrets.DB_USR }}
               export DB_PSW=${{ secrets.DB_PSW }}
               export JWT_SECRET=${{ secrets.JWT_SECRET }}
               export REPOSITORY_OWNER=${{ github.repository_owner }}
-              envsubst < ./${{ matrix.service }}/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
+              envsubst < ./${{ matrix.service }}/src/main/resources/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
 
           - name: Create application-prod.yml from template for sender-service
             if: matrix.service == 'sender-service'
             run: |
+              mkdir -p ./${{ matrix.service }}/docker_image
               export SENDER_DB_URL=${{ secrets.SENDER_DB_URL }}
               export DB_USR=${{ secrets.DB_USR }}
               export DB_PSW=${{ secrets.DB_PSW }}
@@ -198,17 +202,18 @@ jobs:
               export SENDER_SMPT_PSW=${{ secrets.SENDER_SMPT_PSW }}
               export JWT_SECRET=${{ secrets.JWT_SECRET }}
               export REPOSITORY_OWNER=${{ github.repository_owner }}
-              envsubst < ./${{ matrix.service }}/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
+              envsubst < ./${{ matrix.service }}/src/main/resources/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
 
           - name: Create application-prod.yml from template for user-service
             if: matrix.service == 'user-service'
             run: |
+              mkdir -p ./${{ matrix.service }}/docker_image
               export USER_DB_URL=${{ secrets.USER_DB_URL }}
               export DB_USR=${{ secrets.DB_USR }}
               export DB_PSW=${{ secrets.DB_PSW }}
               export JWT_SECRET=${{ secrets.JWT_SECRET }}
               export REPOSITORY_OWNER=${{ github.repository_owner }}
-              envsubst < ./${{ matrix.service }}/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
+              envsubst < ./${{ matrix.service }}/src/main/resources/application-prod.yml.template > ./${{ matrix.service }}/docker_image/application-prod.yml
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
