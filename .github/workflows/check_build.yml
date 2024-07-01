@@ -168,7 +168,6 @@ jobs:
             JAR_FILE=${{ env.JAR_NAME }}
 
 
-
   deploy:
     runs-on: ubuntu-22.04
     needs: [build_services, build_db]
