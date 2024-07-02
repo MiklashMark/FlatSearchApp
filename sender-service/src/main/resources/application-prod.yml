@@ -15,4 +15,4 @@ app:
     password: "{{SENDER_SMPT_PSW}}"
   jwt:
     secret: "{{JWT_SECRET}}"
-    issuer: "{{ github.repository_owner }}"
+    issuer: "{{REPOSITORY_OWNER}}"

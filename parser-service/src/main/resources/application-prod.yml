@@ -10,5 +10,5 @@ spring:
 app:
   jwt:
     secret: "{{JWT_SECRET}}"
-    issuer: "{{ github.repository_owner }}"
+    issuer: "{{REPOSITORY_OWNER}}"
 
