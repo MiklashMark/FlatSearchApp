@@ -165,7 +165,7 @@ jobs:
                 -e "s|{{DB_USR}}|${{ secrets.DB_USR }}|" \
                 -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
                 -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'flat-service' ]]; then
@@ -174,7 +174,7 @@ jobs:
                 -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
                 -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
                 -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'parser-service' ]]; then
@@ -183,7 +183,7 @@ jobs:
                 -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
                 -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
                 -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml >  ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'sender-service' ]]; then
@@ -196,7 +196,7 @@ jobs:
                 -e "s|{{SENDER_SMPT_PSW}}|${{ secrets.SENDER_SMPT_PSW }}|" \
                 -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
                 -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'user-service' ]]; then
@@ -205,7 +205,7 @@ jobs:
                 -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
                 -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
                 -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml >  ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
         shell: /usr/bin/bash -e {0}
 
