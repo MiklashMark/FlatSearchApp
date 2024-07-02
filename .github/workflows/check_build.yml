@@ -92,7 +92,7 @@ jobs:
     needs: test_services
     strategy:
       matrix:
-        db_s: [audit-db, user-db, flat-db]
+        db_s: [audit-db, user-db, flat-db, sender-db]
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
