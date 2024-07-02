@@ -1,15 +1,14 @@
 spring:
   datasource:
-    url: ${{FLAT_DB_URL}}
-    username: ${{DB_USR}}
-    password: ${{DB_PSW}}
-
+    url: "{{FLAT_DB_URL}}"
+    username: "{{DB_USR}}"
+    password: "{{DB_PSW}}"
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
+
 app:
   jwt:
-    secret: ${{JWT_SECRET}}
-    issuer: ${{repository.owner}}
-
+    secret: "{{JWT_SECRET}}"
+    issuer: "{{ github.repository_owner }}"
 

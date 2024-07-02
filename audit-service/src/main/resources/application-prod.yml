@@ -1,16 +1,15 @@
 spring:
   datasource:
-    url: ${{sercets.AUDIT_DB_URL}}
-    username: ${{sercets.DB_USR}}
-    password: ${{sercets.DB_PSW}}
-
+    url: "{{SENDER_DB_URL}}"
+    username: "{{DB_USR}}"
+    password: "{{DB_PSW}}"
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
 
 app:
   jwt:
-    secret: ${{sercets.JWT_SECRET}}
+    secret: "{{JWT_SECRET}}"
 
-  reports:
-    dir: /reports
+reports:
+  dir: /reports

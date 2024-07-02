@@ -1,20 +1,18 @@
 spring:
   datasource:
-    url: ${{SENDER_DB_URL}}
-    username: ${{DB_USR}}
-    password: ${{DB_PSW}}
-
+    url: "{{SENDER_DB_URL}}"
+    username: "{{DB_USR}}"
+    password: "{{DB_PSW}}"
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
 
 app:
   mail:
-    host: ${{SENDER_SMPT_HOST}}
-    port: ${{SENDER_SMPT_PORT}}
-    username: ${{SENDER_SMPT_USERNAME}}
-    password: ${{SENDER_SMPT_PSW}}
-
+    host: "{{SENDER_SMPT_HOST}}"
+    port: "{{SENDER_SMPT_PORT}}"
+    username: "{{SENDER_SMPT_USERNAME}}"
+    password: "{{SENDER_SMPT_PSW}}"
   jwt:
-    secret: ${{JWT_SECRET}}
-    issuer: ${{repository.owner}}
+    secret: "{{JWT_SECRET}}"
+    issuer: "{{ github.repository_owner }}"
