@@ -207,6 +207,9 @@ jobs:
 
       - name: List contents of docker_image directory
         run: ls -la ./${{ matrix.service }}/docker_image
+        
+      - name: Display application-prod.yml contents
+        run: cat ./${{ matrix.service }}/docker_image/application-prod.yml
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
