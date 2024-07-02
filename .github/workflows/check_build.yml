@@ -210,6 +210,7 @@ jobs:
           fi
         shell: /usr/bin/bash -e {0}
 
+
       - name: List contents of docker_image directory
         run: ls -la ./${{ matrix.service }}/docker_image
         
