@@ -1,16 +1,16 @@
 spring:
   datasource:
-    url: "{{USER_DB_URL}}"
-    username: "{{DB_USR}}"
-    password: "{{DB_PSW}}"
+    url: {{USER_DB_URL}}
+    username: {{DB_USR}}
+    password: {{DB_PSW}}
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
 
 app:
   jwt:
-    secret: "{{JWT_SECRET}}"
-    issuer: "{{REPOSITORY_OWNER}}"
+    secret: {{JWT_SECRET}}
+    issuer: {{REPOSITORY_OWNER}}
 
 audit:
   service:
