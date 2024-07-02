@@ -179,7 +179,7 @@ jobs:
           fi
 
           if [[ ${{ matrix.service }} == 'parser-service' ]]; then
-            sed -e 's|{{SENDER_DB_URL}}|${{ secrets.SENDER_DB_URL }}|' \
+            sed -e 's|{{FLAT_DB_URL}}|${{ secrets.FLAT_DB_URL }}|' \
                 -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
                 -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
                 -e 's|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|' \
@@ -188,7 +188,7 @@ jobs:
           fi
 
           if [[ ${{ matrix.service }} == 'sender-service' ]]; then
-            sed -e 's|{{SENDER_DB_URL}}|${{ secrets.USER_DB_URL }}|' \
+            sed -e 's|{{SENDER_DB_URL}}|${{ secrets.SENDER_DB_URL }}|' \
                 -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
                 -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
                 -e 's|{{SENDER_SMPT_HOST}}|${{ secrets.SENDER_SMPT_HOST }}|' \

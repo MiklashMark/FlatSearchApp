@@ -3,4 +3,4 @@ ARG JAR_FILE
 WORKDIR /app
 COPY ${JAR_FILE} flat-service.jar
 COPY application-prod.yml application-prod.yml
-CMD ["java", "-jar", "flat-service.jar"]
+CMD ["java", "-Dspring.profiles.active=prod", "-jar", "flat-service.jar"]
