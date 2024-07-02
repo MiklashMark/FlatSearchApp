@@ -160,52 +160,53 @@ jobs:
       - name: Create application-prod.yml from template
         run: |
           mkdir -p ./${{ matrix.service }}/docker_image
+
           if [[ ${{ matrix.service }} == 'audit-service' ]]; then
-            sed -e "s|{{AUDIT_DB_URL}}|${{ secrets.AUDIT_DB_URL }}|" \
-                -e "s|{{DB_USR}}|${{ secrets.DB_USR }}|" \
-                -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
-                -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+            sed -e 's|{{AUDIT_DB_URL}}|${{ secrets.AUDIT_DB_URL }}|' \
+                -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
+                -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
+                -e 's|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|' \
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml >  ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'flat-service' ]]; then
-            sed -e "s|{{FLAT_DB_URL}}|${{ secrets.FLAT_DB_URL }}|" \
-                -e "s|{{DB_USR}}|${{ secrets.DB_USR }}|" \
-                -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
-                -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
-                -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+            sed -e 's|{{FLAT_DB_URL}}|${{ secrets.FLAT_DB_URL }}|' \
+                -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
+                -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
+                -e 's|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|' \
+                -e 's|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|' \
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml >  ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'parser-service' ]]; then
-            sed -e "s|{{SENDER_DB_URL}}|${{ secrets.SENDER_DB_URL }}|" \
-                -e "s|{{DB_USR}}|${{ secrets.DB_USR }}|" \
-                -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
-                -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
-                -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+            sed -e 's|{{SENDER_DB_URL}}|${{ secrets.SENDER_DB_URL }}|' \
+                -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
+                -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
+                -e 's|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|' \
+                -e 's|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|' \
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml >  ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'sender-service' ]]; then
-            sed -e "s|{{SENDER_DB_URL}}|${{ secrets.USER_DB_URL }}|" \
-                -e "s|{{DB_USR}}|${{ secrets.DB_USR }}|" \
-                -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
-                -e "s|{{SENDER_SMPT_HOST}}|${{ secrets.SENDER_SMPT_HOST }}|" \
-                -e "s|{{SENDER_SMPT_PORT}}|${{ secrets.SENDER_SMPT_PORT }}|" \
-                -e "s|{{SENDER_SMPT_USERNAME}}|${{ secrets.SENDER_SMPT_USERNAME }}|" \
-                -e "s|{{SENDER_SMPT_PSW}}|${{ secrets.SENDER_SMPT_PSW }}|" \
-                -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
-                -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+            sed -e 's|{{SENDER_DB_URL}}|${{ secrets.USER_DB_URL }}|' \
+                -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
+                -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
+                -e 's|{{SENDER_SMPT_HOST}}|${{ secrets.SENDER_SMPT_HOST }}|' \
+                -e 's|{{SENDER_SMPT_PORT}}|${{ secrets.SENDER_SMPT_PORT }}|' \
+                -e 's|{{SENDER_SMPT_USERNAME}}|${{ secrets.SENDER_SMPT_USERNAME }}|' \
+                -e 's|{{SENDER_SMPT_PSW}}|${{ secrets.SENDER_SMPT_PSW }}|' \
+                -e 's|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|' \
+                -e 's|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|' \
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml >  ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
 
           if [[ ${{ matrix.service }} == 'user-service' ]]; then
-            sed -e "s|{{USER_DB_URL}}|${{ secrets.USER_DB_URL }}|" \
-                -e "s|{{DB_USR}}|${{ secrets.DB_USR }}|" \
-                -e "s|{{DB_PSW}}|${{ secrets.DB_PSW }}|" \
-                -e "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|" \
-                -e "s|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|" \
-                ./${{ matrix.service }}/src/main/resources/application-prod.yml > temp.yml && mv temp.yml ./${{ matrix.service }}/docker_image/application-prod.yml
+            sed -e 's|{{USER_DB_URL}}|${{ secrets.USER_DB_URL }}|' \
+                -e 's|{{DB_USR}}|${{ secrets.DB_USR }}|' \
+                -e 's|{{DB_PSW}}|${{ secrets.DB_PSW }}|' \
+                -e 's|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|' \
+                -e 's|{{REPOSITORY_OWNER}}|${{ github.repository_owner }}|' \
+                ./${{ matrix.service }}/src/main/resources/application-prod.yml > ./${{ matrix.service }}/docker_image/application-prod.yml
           fi
         shell: /usr/bin/bash -e {0}
 
