@@ -2,7 +2,7 @@ version: '2.1'
 services:
   user-db:
     build: user-db
-    image: user-db:1.0.8
+    image: user-db:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -12,7 +12,7 @@ services:
 
   sender-db:
     build: sender-db
-    image: sender-db:1.0.1
+    image: sender-db:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -40,10 +40,8 @@ services:
 
   sender-service:
     build: sender-service
-    image: sender-service:1.0.4
+    image: sender-service:1.0.0
 #    restart: always
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://sender-db/mailDB
     ports:
       - "8081:8081"
     depends_on:
@@ -53,9 +51,7 @@ services:
 
   user-service:
     build: user-service
-    image: user-service:1.0.9
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://user-db/usersDB
+    image: user-service:1.0.0
     ports:
       - "8080:8080"
     depends_on:
@@ -66,8 +62,6 @@ services:
   parser-service:
     build: parser-service
     image: parser-service:1.0.0
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://flat-db/Flats
     ports:
       - "8082:8082"
     depends_on:
@@ -77,8 +71,6 @@ services:
   flat-service:
     build: flat-service
     image: flat-service:1.0.0
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://flat-db/Flats
     ports:
       - "8083:8083"
     depends_on:
@@ -88,12 +80,14 @@ services:
   audit-service:
     build: audit-service
     image: audit-service:1.0.0
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://audit-db:5432/audit_reportDB
     ports:
       - "8084:8084"
     networks:
       - flats_ntwrk
+
+networks:
+    flats_ntwrk:
+      driver: bridge
 # pgadmin:
 #   build: pgadmin
 #   image: flats_pgadmin:1.0.1
@@ -113,6 +107,4 @@ services:
 #   networks:
 #     - flats_ntwrk
 
-networks:
-  flats_ntwrk:
-    driver: bridge  # Драйвер для сети
+
