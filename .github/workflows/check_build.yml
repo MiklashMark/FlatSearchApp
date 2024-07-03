@@ -260,6 +260,9 @@ jobs:
       - name: Log in to the Container registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ${{env.REGISTRY}} -u markmiklash@gmail.com --password-stdin
 
+      - name: Pull latest images
+        run: docker-compose --context remote -f docker-compose.yml pull
+
       - name: Docker Compose up
         env:
           IMAGE_REF: ${{ steps.meta.outputs.tags }}
