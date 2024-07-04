@@ -254,6 +254,9 @@ jobs:
       - name: Log in to the Container registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ${{env.REGISTRY}} -u markmiklash@gmail.com --password-stdin
 
+      - name: View .dockerignore file
+        run: cat .dockerignore
+
       - name: Docker Compose up
         run: docker-compose -f docker-compose.yml up -d
 
