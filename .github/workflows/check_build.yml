@@ -254,11 +254,8 @@ jobs:
       - name: Log in to the Container registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ${{env.REGISTRY}} -u markmiklash@gmail.com --password-stdin
 
-      - name: Pull latest images
-        run: docker compose --context remote pull
-
       - name: Docker Compose up
-        run: docker compose --context remote up 
+        run: docker-compose --context remote up 
 
       - name: Clean up SSH keys
         run: rm -rf ~/.ssh
