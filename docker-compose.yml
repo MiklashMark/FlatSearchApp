@@ -1,8 +1,7 @@
 version: '2.1'
 services:
   user-db:
-    build: user-db
-    image: user-db:1.0.0
+    image: ghcr.io/markmiklash/user-db:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -11,26 +10,25 @@ services:
       - flats_ntwrk
 
   sender-db:
-    build: sender-db
-    image: sender-db:1.0.0
+    image: ghcr.io/markmiklash/sender-db:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: kitanax
     networks:
       - flats_ntwrk
+
   flat-db:
-    build: flat-db
-    image: flat-db:1.0.0
+    image: ghcr.io/markmiklash/flat-db:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: kitanax
     networks:
       - flats_ntwrk
+
   audit-db:
-    build: audit-db
-    image: audit-db:1.0.0
+    image: ghcr.io/markmiklash/audit-db:1.0.0
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -39,9 +37,8 @@ services:
       - flats_ntwrk
 
   sender-service:
-    build: sender-service
-    image: sender-service:1.0.0
-#    restart: always
+    image: ghcr.io/markmiklash/sender-service:1.0.0
+    restart: always
     ports:
       - "8081:8081"
     depends_on:
@@ -50,8 +47,7 @@ services:
       - flats_ntwrk
 
   user-service:
-    build: user-service
-    image: user-service:1.0.0
+    image: ghcr.io/markmiklash/user-service:1.0.0
     ports:
       - "8080:8080"
     depends_on:
@@ -60,34 +56,33 @@ services:
       - flats_ntwrk
 
   parser-service:
-    build: parser-service
-    image: parser-service:1.0.0
+    image: ghcr.io/markmiklash/parser-service:1.0.0
     ports:
       - "8082:8082"
     depends_on:
       - flat-db
     networks:
       - flats_ntwrk
+
   flat-service:
-    build: flat-service
-    image: flat-service:1.0.0
+    image: ghcr.io/markmiklash/flat-service:1.0.0
     ports:
       - "8083:8083"
     depends_on:
       - flat-db
     networks:
       - flats_ntwrk
+
   audit-service:
-    build: audit-service
-    image: audit-service:1.0.0
+    image: ghcr.io/markmiklash/audit-service:1.0.0
     ports:
       - "8084:8084"
     networks:
       - flats_ntwrk
 
 networks:
-    flats_ntwrk:
-      driver: bridge
+  flats_ntwrk:
+    driver: bridge
 # pgadmin:
 #   build: pgadmin
 #   image: flats_pgadmin:1.0.1
