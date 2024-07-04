@@ -251,12 +251,6 @@ jobs:
       - name: Debug known_hosts
         run: cat ~/.ssh/known_hosts
 
-      - name: Extract metadata (tags, labels) for Docker image
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
       - name: Log in to the Container registry
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ${{env.REGISTRY}} -u markmiklash@gmail.com --password-stdin
 
@@ -264,8 +258,6 @@ jobs:
         run: docker-compose --context remote -f docker-compose.yml pull
 
       - name: Docker Compose up
-        env:
-          IMAGE_REF: ${{ steps.meta.outputs.tags }}
         run: |
           docker-compose --context remote -f docker-compose.yml up 
 
