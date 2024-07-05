@@ -255,9 +255,7 @@ jobs:
         run: echo ${{ secrets.REGISTRY_TOKEN }} | docker login ${{env.REGISTRY}} -u markmiklash@gmail.com --password-stdin
 
       - name: Docker Compose up
-        run: |
-          docker-compose --context remote -f docker-compose.yml pull
-          docker-compose --context remote -f docker-compose.yml up -d
+        run:  docker-compose --context remote -f docker-compose.yml up -d
 
 
       - name: Clean up SSH keys
